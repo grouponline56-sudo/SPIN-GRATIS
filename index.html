@@ -11,7 +11,7 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -28,13 +28,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(8, 5, 25, 0.7);
+            background: rgba(8, 5, 25, 0.70);
             backdrop-filter: blur(2px);
             z-index: 0;
         }
         .app-container {
             position: relative;
-            z-index: 2;
+            z-index: 1;
             width: 100%;
             max-width: 600px;
             margin: 0 auto;
@@ -44,56 +44,42 @@
             backdrop-filter: blur(24px);
             border-radius: 48px;
             padding: 30px 24px 36px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.10);
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
         }
         .hidden {
             display: none !important;
         }
 
-        /* ---------- LOGIN ---------- */
+        /* ===== LOGIN ===== */
         .login-screen {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 30px 20px;
+            padding: 20px 10px;
             text-align: center;
         }
-        .login-screen .logo-big {
+        .login-screen .logo {
             font-size: 72px;
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-12px);
-            }
+            margin-bottom: 10px;
         }
         .login-screen h2 {
             font-size: 28px;
-            font-weight: 700;
             color: #fff;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
-        .login-screen .sub {
+        .login-screen p {
             color: #aaa;
             font-size: 15px;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
             max-width: 300px;
-        }
-        .login-screen .sub strong {
-            color: #f9d976;
         }
         .login-input-group {
             width: 100%;
             max-width: 320px;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
         }
         .login-input-group input {
             padding: 16px 20px;
@@ -105,10 +91,13 @@
             outline: none;
             text-align: center;
         }
-        .login-input-group input:focus {
-            border-color: rgba(249, 217, 118, 0.5);
+        .login-input-group input::placeholder {
+            color: #666;
         }
-        .login-input-group .login-btn {
+        .login-input-group input:focus {
+            border-color: #f9d976;
+        }
+        .login-btn {
             padding: 16px;
             border-radius: 60px;
             border: none;
@@ -117,25 +106,25 @@
             font-size: 18px;
             font-weight: 700;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.25s;
         }
-        .login-input-group .login-btn:hover {
+        .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(243, 156, 18, 0.4);
+            box-shadow: 0 8px 30px rgba(243, 156, 18, 0.4);
         }
         .login-error {
             color: #ff6b6b;
             font-size: 14px;
-            min-height: 22px;
+            min-height: 24px;
             margin-top: 6px;
         }
-        .footer-note {
-            margin-top: 24px;
+        .login-footer {
+            margin-top: 20px;
             font-size: 12px;
             color: #555;
         }
 
-        /* ---------- GAME ---------- */
+        /* ===== GAME ===== */
         .game-header {
             display: flex;
             justify-content: space-between;
@@ -146,14 +135,11 @@
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-        .game-header .brand h1 {
             font-size: 22px;
             font-weight: 700;
             background: linear-gradient(135deg, #f9d976, #f39c12);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
         .game-header .user-badge {
             background: rgba(255, 255, 255, 0.08);
@@ -161,7 +147,6 @@
             border-radius: 100px;
             font-size: 13px;
             color: #aaa;
-            border: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -170,17 +155,15 @@
             color: #fff;
             font-weight: 600;
         }
-        .game-header .user-badge .logout-btn {
+        .game-header .logout-btn {
             background: none;
             border: none;
             color: #ff6b6b;
             cursor: pointer;
-            font-size: 14px;
-        }
-        .game-header .user-badge .logout-btn:hover {
-            color: #ff4757;
+            font-size: 16px;
         }
 
+        /* ===== WHEEL ===== */
         .wheel-wrapper {
             position: relative;
             width: 100%;
@@ -193,7 +176,7 @@
             height: 100% !important;
             display: block;
             border-radius: 50%;
-            box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.2), 0 0 60px rgba(255, 215, 0, 0.1);
+            box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.20), 0 0 60px rgba(255, 215, 0, 0.10);
         }
         .pointer {
             position: absolute;
@@ -203,6 +186,7 @@
             z-index: 6;
             font-size: 34px;
             filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.6));
+            pointer-events: none;
         }
         .center-pin {
             position: absolute;
@@ -213,12 +197,11 @@
             height: 60px;
             border-radius: 50%;
             background: radial-gradient(circle at 35% 35%, #fff, #f0d060);
-            box-shadow: 0 0 0 8px rgba(255, 215, 0, 0.25), 0 0 40px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 0 8px rgba(255, 215, 0, 0.25);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 28px;
-            color: #8b6b00;
             pointer-events: none;
             z-index: 5;
         }
@@ -234,6 +217,7 @@
             }
         }
 
+        /* ===== ACTION ===== */
         .action-area {
             display: flex;
             flex-direction: column;
@@ -250,30 +234,25 @@
             font-weight: 700;
             color: #1a1a2e;
             cursor: pointer;
-            transition: 0.25s;
+            transition: all 0.25s;
             box-shadow: 0 8px 32px rgba(243, 156, 18, 0.35);
             width: 100%;
             max-width: 280px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
+        }
+        .spin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(243, 156, 18, 0.5);
         }
         .spin-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
         }
-        .spin-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(243, 156, 18, 0.5);
-        }
-
         .rules {
             display: flex;
-            justify-content: center;
             gap: 16px;
             flex-wrap: wrap;
-            margin-top: 12px;
+            justify-content: center;
         }
         .rules .rule-item {
             background: rgba(255, 255, 255, 0.06);
@@ -282,12 +261,9 @@
             font-size: 12px;
             color: #ccc;
             border: 1px solid rgba(255, 255, 255, 0.06);
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
-        /* ---------- DASHBOARD MENU ---------- */
+        /* ===== DASHBOARD ===== */
         .dashboard {
             margin-top: 28px;
             padding-top: 24px;
@@ -297,14 +273,11 @@
             font-size: 18px;
             font-weight: 600;
             color: #fff;
-            margin-bottom: 16px;
             text-align: center;
+            margin-bottom: 16px;
         }
         .dashboard-title span {
-            background: linear-gradient(135deg, #f9d976, #f39c12);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #f9d976;
         }
         .menu-grid {
             display: grid;
@@ -317,11 +290,10 @@
             padding: 16px 12px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: 0.2s;
+            transition: transform 0.2s;
         }
         .menu-item:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
         }
         .product-img {
             width: 64px;
@@ -351,7 +323,7 @@
             margin-top: 4px;
         }
 
-        /* ---------- MODAL ---------- */
+        /* ===== MODAL ===== */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -360,10 +332,10 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(12px);
-            z-index: 100;
             display: none;
             justify-content: center;
             align-items: center;
+            z-index: 100;
         }
         .modal-overlay.show {
             display: flex;
@@ -378,33 +350,29 @@
             border: 1px solid rgba(255, 255, 255, 0.06);
             animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .modal-box.win {
-            border-color: rgba(249, 217, 118, 0.3);
-        }
         @keyframes popIn {
             0% {
                 opacity: 0;
-                transform: scale(0.7) rotate(-6deg);
+                transform: scale(0.7);
             }
             100% {
                 opacity: 1;
-                transform: scale(1) rotate(0deg);
+                transform: scale(1);
             }
         }
         .modal-box .result-icon {
             font-size: 72px;
-            margin-bottom: 8px;
         }
         .modal-box .result-title {
             font-size: 26px;
             font-weight: 700;
             color: #fff;
+            margin: 8px 0 4px;
         }
         .modal-box .result-title.gold {
             background: linear-gradient(135deg, #f9d976, #f39c12);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
         .modal-box .result-sub {
             color: #aaa;
@@ -416,16 +384,13 @@
             border: none;
             padding: 14px 36px;
             border-radius: 60px;
-            color: #1a1a2e;
             font-size: 16px;
             font-weight: 600;
+            color: #1a1a2e;
             cursor: pointer;
-            transition: 0.25s;
-        }
-        .modal-box .modal-close-btn:hover {
-            box-shadow: 0 8px 30px rgba(243, 156, 18, 0.3);
         }
 
+        /* ===== CONFETTI ===== */
         #confetti-canvas {
             position: fixed;
             top: 0;
@@ -440,22 +405,6 @@
             .card {
                 padding: 20px 16px 26px;
             }
-            .game-header .brand h1 {
-                font-size: 17px;
-            }
-            .center-pin {
-                width: 48px;
-                height: 48px;
-                font-size: 20px;
-            }
-            .pointer {
-                font-size: 26px;
-                top: -8px;
-            }
-            .spin-btn {
-                font-size: 17px;
-                padding: 14px 32px;
-            }
             .menu-grid {
                 gap: 10px;
             }
@@ -463,62 +412,54 @@
                 width: 50px;
                 height: 50px;
             }
-            .login-screen h2 {
-                font-size: 22px;
-            }
-            .login-screen .logo-big {
-                font-size: 54px;
-            }
         }
     </style>
 </head>
 <body>
 
-    <div id="confetti-canvas"></div>
+    <!-- CONFETTI -->
+    <canvas id="confetti-canvas"></canvas>
 
     <div class="app-container">
         <div class="card">
 
-            <!-- LOGIN -->
+            <!-- ========== LOGIN ========== -->
             <div id="loginScreen">
                 <div class="login-screen">
-                    <div class="logo-big">🍧</div>
+                    <div class="logo">🍧</div>
                     <h2>Spin &amp; Win</h2>
-                    <p class="sub">
-                        Masukkan <strong>ID khusus</strong> yang telah diberikan
-                        oleh admin untuk memutar roda dan menangkan hadiah!
-                    </p>
+                    <p>Masukkan <strong>ID khusus</strong> yang diberikan admin untuk memutar roda.</p>
                     <div class="login-input-group">
-                        <input type="text" id="loginIdInput" placeholder="Masukkan ID Anda" autocomplete="off" />
+                        <input type="text" id="loginIdInput" placeholder="Masukkan ID Anda" />
                         <button class="login-btn" id="loginBtn">🚀 Masuk</button>
                         <div class="login-error" id="loginError"></div>
                     </div>
-                    <div class="footer-note">* Hanya untuk satu orang yang memiliki ID khusus</div>
+                    <div class="login-footer">* Hanya untuk satu orang yang memiliki ID</div>
                 </div>
             </div>
 
-            <!-- GAME -->
+            <!-- ========== GAME ========== -->
             <div id="gameScreen" class="hidden">
+                <!-- Header -->
                 <div class="game-header">
-                    <div class="brand">
-                        <span style="font-size:28px;">🍧</span>
-                        <h1>Es Mambo Spin</h1>
-                    </div>
+                    <div class="brand">🍧 Es Mambo Spin</div>
                     <div class="user-badge">
                         👤 <span id="currentUser">—</span>
                         <button class="logout-btn" id="logoutBtn">✕</button>
                     </div>
                 </div>
 
+                <!-- Wheel -->
                 <div class="wheel-wrapper">
                     <canvas id="wheelCanvas" width="600" height="600"></canvas>
                     <div class="pointer">▼</div>
                     <div class="center-pin" id="centerPin">🎯</div>
                 </div>
 
+                <!-- Action -->
                 <div class="action-area">
                     <button class="spin-btn" id="spinBtn">
-                        <span>🎡</span> PUTAR RODA
+                        🎡 PUTAR RODA
                     </button>
                     <div class="rules">
                         <span class="rule-item">🛒 Min. Beli 20K</span>
@@ -527,44 +468,33 @@
                     </div>
                 </div>
 
+                <!-- Dashboard Menu -->
                 <div class="dashboard">
                     <div class="dashboard-title">🍧 <span>Menu Es Mambo</span> 🍧</div>
                     <div class="menu-grid">
                         <div class="menu-item">
-                            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center" alt="Mambo Original" class="product-img" />
+                            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center" class="product-img" />
                             <div class="name">Mambo Original</div>
                             <div class="price">Rp 15.000</div>
                             <span class="badge">Best Seller</span>
                         </div>
                         <div class="menu-item">
-                            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center&auto=format&fit=crop&w=150&h=150&q=80" alt="Mambo Strawberry" class="product-img" />
+                            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center" class="product-img" />
                             <div class="name">Mambo Strawberry</div>
                             <div class="price">Rp 18.000</div>
                             <span class="badge">Favorit</span>
                         </div>
                         <div class="menu-item">
-                            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center&auto=format&fit=crop&w=150&h=150&q=80" alt="Mambo Coklat" class="product-img" />
+                            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center" class="product-img" />
                             <div class="name">Mambo Coklat</div>
                             <div class="price">Rp 18.000</div>
                             <span class="badge">Nyoklat</span>
                         </div>
                         <div class="menu-item">
-                            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center&auto=format&fit=crop&w=150&h=150&q=80" alt="Mambo Kelapa" class="product-img" />
+                            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center" class="product-img" />
                             <div class="name">Mambo Kelapa</div>
                             <div class="price">Rp 20.000</div>
                             <span class="badge">Segar</span>
-                        </div>
-                        <div class="menu-item">
-                            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center&auto=format&fit=crop&w=150&h=150&q=80" alt="Mambo Pisang" class="product-img" />
-                            <div class="name">Mambo Pisang</div>
-                            <div class="price">Rp 17.000</div>
-                            <span class="badge">Spesial</span>
-                        </div>
-                        <div class="menu-item">
-                            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center&auto=format&fit=crop&w=150&h=150&q=80" alt="Mambo Es Campur" class="product-img" />
-                            <div class="name">Mambo Es Campur</div>
-                            <div class="price">Rp 22.000</div>
-                            <span class="badge">Mega</span>
                         </div>
                     </div>
                 </div>
@@ -573,7 +503,7 @@
         </div>
     </div>
 
-    <!-- MODAL -->
+    <!-- ========== MODAL ========== -->
     <div class="modal-overlay" id="resultModal">
         <div class="modal-box" id="modalBox">
             <span class="result-icon" id="resultIcon">🎉</span>
@@ -585,13 +515,10 @@
 
     <script>
         // ================================================================
-        //  KONFIGURASI - GANTI URL INI
+        //  KONFIGURASI
         // ================================================================
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJs4eKzCV_-0QR7d1ukIAkXer2vpH3D9TEuX1IFbipwrfiGT8ALJnLO_R4sHcreb10/exec'; // GANTI
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw45VnriI580xGnF2nmWa7dKQjLztpv5uSROnDkFvK7szTgYrDHLOcKZnOgIjvM-6vM/exec  '; // GANTI
 
-        // ================================================================
-        //  DATA HADIAH
-        // ================================================================
         const PRIZES = [
             { label: 'Free 1 Cup 🍧', type: 'win' },
             { label: 'Voucher 10K 🎫', type: 'win' },
@@ -602,7 +529,11 @@
             { label: 'Free Large 📏', type: 'win' },
             { label: 'Coba Lagi 🔄', type: 'lose' },
         ];
-        const SEGMENT_COLORS = ['#FF6B6B', '#FFB347', '#F9D976', '#6BCB77', '#4D96FF', '#9B59B6', '#FF6B9D', '#00C9A7'];
+
+        const SEGMENT_COLORS = [
+            '#FF6B6B', '#FFB347', '#F9D976', '#6BCB77',
+            '#4D96FF', '#9B59B6', '#FF6B9D', '#00C9A7'
+        ];
 
         // ================================================================
         //  STATE
@@ -626,11 +557,11 @@
         const wheelCanvas = document.getElementById('wheelCanvas');
         const centerPin = document.getElementById('centerPin');
         const resultModal = document.getElementById('resultModal');
-        const modalBox = document.getElementById('modalBox');
         const resultIcon = document.getElementById('resultIcon');
         const resultTitle = document.getElementById('resultTitle');
         const resultSub = document.getElementById('resultSub');
         const modalCloseBtn = document.getElementById('modalCloseBtn');
+
         const ctx = wheelCanvas.getContext('2d');
 
         // ================================================================
@@ -724,11 +655,11 @@
         }
 
         // ================================================================
-        //  GAMBAR RODA
+        //  DRAW WHEEL
         // ================================================================
         function drawWheel(rotation) {
-            const w = wheelCanvas.width,
-                h = wheelCanvas.height;
+            const w = wheelCanvas.width;
+            const h = wheelCanvas.height;
             const cx = w / 2,
                 cy = h / 2;
             const r = Math.min(w, h) * 0.42;
@@ -736,6 +667,7 @@
             const arc = (2 * Math.PI) / n;
 
             ctx.clearRect(0, 0, w, h);
+
             for (let i = 0; i < n; i++) {
                 const startAngle = i * arc + rotation;
                 const endAngle = startAngle + arc;
@@ -750,64 +682,68 @@
                 ctx.stroke();
 
                 const midAngle = startAngle + arc / 2;
-                const tx = cx + r * 0.65 * Math.cos(midAngle);
-                const ty = cy + r * 0.65 * Math.sin(midAngle);
+                const textR = r * 0.68;
+                const tx = cx + textR * Math.cos(midAngle);
+                const ty = cy + textR * Math.sin(midAngle);
                 ctx.save();
                 ctx.translate(tx, ty);
                 ctx.rotate(midAngle + (midAngle > Math.PI / 2 ? Math.PI : 0));
                 ctx.fillStyle = '#fff';
-                ctx.font = 'bold 16px "Segoe UI"';
+                ctx.font = 'bold 17px "Segoe UI", sans-serif';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.shadowColor = 'rgba(0,0,0,0.5)';
-                ctx.shadowBlur = 8;
-                ctx.fillText(PRIZES[i].label.split(' ').slice(0, 2).join(' '), 0, 0);
+                ctx.shadowBlur = 6;
+                ctx.fillText(PRIZES[i].label, 0, 0);
                 ctx.restore();
             }
+
+            // Outer ring
             ctx.beginPath();
-            ctx.arc(cx, cy, r * 0.12, 0, 2 * Math.PI);
-            ctx.fillStyle = 'rgba(255,215,0,0.2)';
-            ctx.fill();
+            ctx.arc(cx, cy, r, 0, 2 * Math.PI);
             ctx.strokeStyle = 'rgba(255,215,0,0.15)';
             ctx.lineWidth = 3;
-            ctx.arc(cx, cy, r, 0, 2 * Math.PI);
             ctx.stroke();
         }
 
         // ================================================================
-        //  SPIN
+        //  SPIN LOGIC
         // ================================================================
         function getPrizeIndex(rotation) {
             const n = PRIZES.length;
             const arc = (2 * Math.PI) / n;
-            let angle = (-Math.PI / 2 - rotation) % (2 * Math.PI);
+            const pointerAngle = -Math.PI / 2;
+            let angle = (pointerAngle - rotation) % (2 * Math.PI);
             if (angle < 0) angle += 2 * Math.PI;
             return Math.floor(angle / arc) % n;
         }
 
         function spinWheel() {
             if (isSpinning || !currentUser) return;
+
             isSpinning = true;
             spinBtn.disabled = true;
-            spinBtn.innerHTML = '⏳ Memutar...';
+            spinBtn.textContent = '⏳ Memutar...';
             centerPin.classList.add('spinning');
 
-            const extra = 5 + Math.random() * 3;
-            const totalRotation = extra * 2 * Math.PI + Math.random() * 2 * Math.PI;
+            const extraSpins = 5 + Math.random() * 3;
+            const targetAngle = Math.random() * 2 * Math.PI;
+            const totalRotation = extraSpins * 2 * Math.PI + targetAngle;
             const startRotation = currentRotation;
             const endRotation = startRotation + totalRotation;
             const duration = 4000 + Math.random() * 1500;
             const startTime = performance.now();
 
-            function animate(time) {
+            function animateSpin(time) {
                 const elapsed = time - startTime;
                 const progress = Math.min(elapsed / duration, 1);
                 const eased = 1 - Math.pow(1 - progress, 3);
                 const rot = startRotation + totalRotation * eased;
                 currentRotation = rot;
                 drawWheel(rot);
+
                 if (progress < 1) {
-                    requestAnimationFrame(animate);
+                    requestAnimationFrame(animateSpin);
                 } else {
                     currentRotation = endRotation;
                     drawWheel(endRotation);
@@ -815,12 +751,12 @@
                     const prize = PRIZES[idx];
                     isSpinning = false;
                     spinBtn.disabled = false;
-                    spinBtn.innerHTML = '🎡 PUTAR RODA';
+                    spinBtn.textContent = '🎡 PUTAR RODA';
                     centerPin.classList.remove('spinning');
                     showResult(prize);
                 }
             }
-            requestAnimationFrame(animate);
+            requestAnimationFrame(animateSpin);
         }
 
         // ================================================================
@@ -828,13 +764,13 @@
         // ================================================================
         function showResult(prize) {
             const isWin = prize.type === 'win';
+
             resultIcon.textContent = isWin ? '🎉' : '😅';
             resultTitle.textContent = isWin ? '🎊 SELAMAT!' : 'Yah, coba lagi!';
             resultTitle.className = 'result-title' + (isWin ? ' gold' : '');
             resultSub.innerHTML = isWin ?
-                `Anda mendapatkan <strong>${prize.label}</strong>! 🎁<br>Hadiah akan segera diproses.` :
-                `Kurang beruntung kali ini.<br>Jangan menyerah, spin lagi! 🔄`;
-            modalBox.className = 'modal-box' + (isWin ? ' win' : '');
+                `Anda mendapatkan <strong>${prize.label}</strong>! 🎁` :
+                'Kurang beruntung kali ini.<br>Jangan menyerah, spin lagi! 🔄';
 
             if (isWin) {
                 sendWinData(currentUser, prize.label);
@@ -842,24 +778,26 @@
             } else {
                 stopConfetti();
             }
+
             resultModal.classList.add('show');
         }
 
         // ================================================================
-        //  API CALLS
+        //  GOOGLE SHEETS API
         // ================================================================
         async function validateLoginId(userId) {
             try {
-                const res = await fetch(GOOGLE_SCRIPT_URL, {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'validate', userId })
+                    body: JSON.stringify({ action: 'validate', userId: userId })
                 });
-                const data = await res.json();
+                if (!response.ok) throw new Error('Network error');
+                const data = await response.json();
                 return data.valid === true;
-            } catch (e) {
-                console.warn('Fallback validasi:', e);
-                return userId === 'VIP_ESMAMBO';
+            } catch (err) {
+                console.warn('Fallback validasi:', err);
+                return userId === 'VIP_ESMAMBO'; // fallback
             }
         }
 
@@ -871,14 +809,14 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         action: 'recordWin',
-                        userId,
-                        prize,
+                        userId: userId,
+                        prize: prize,
                         timestamp: new Date().toISOString()
                     })
                 });
-                console.log('✅ Data terkirim');
-            } catch (e) {
-                console.warn('Gagal kirim data:', e);
+                console.log('✅ Data kemenangan terkirim');
+            } catch (err) {
+                console.warn('⚠️ Gagal kirim data:', err);
             }
         }
 
@@ -888,9 +826,10 @@
         async function handleLogin() {
             const id = loginIdInput.value.trim();
             if (!id) {
-                loginError.textContent = '⚠️ Masukkan ID.';
+                loginError.textContent = '⚠️ Masukkan ID terlebih dahulu.';
                 return;
             }
+
             loginBtn.disabled = true;
             loginBtn.textContent = '⏳ Memeriksa...';
             loginError.textContent = '';
@@ -903,13 +842,14 @@
                     loginScreen.classList.add('hidden');
                     gameScreen.classList.remove('hidden');
                     drawWheel(currentRotation);
-                    loginIdInput.value = '';
+                    loginError.textContent = '';
                 } else {
                     loginError.textContent = '❌ ID tidak dikenali.';
                 }
-            } catch (e) {
-                loginError.textContent = '⚠️ Gagal koneksi.';
+            } catch (err) {
+                loginError.textContent = '⚠️ Gagal terhubung ke server.';
             }
+
             loginBtn.disabled = false;
             loginBtn.textContent = '🚀 Masuk';
         }
@@ -932,14 +872,16 @@
         //  EVENTS
         // ================================================================
         loginBtn.addEventListener('click', handleLogin);
-        loginIdInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+        loginIdInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleLogin();
+        });
         logoutBtn.addEventListener('click', handleLogout);
         spinBtn.addEventListener('click', spinWheel);
         modalCloseBtn.addEventListener('click', () => {
             resultModal.classList.remove('show');
             stopConfetti();
         });
-        resultModal.addEventListener('click', e => {
+        resultModal.addEventListener('click', (e) => {
             if (e.target === resultModal) {
                 resultModal.classList.remove('show');
                 stopConfetti();
@@ -950,8 +892,12 @@
         //  INIT
         // ================================================================
         drawWheel(0);
+        resizeConfetti();
         loginIdInput.focus();
-        console.log('🍧 Es Mambo siap!');
+
+        console.log('🍧 Es Mambo Spin & Win siap!');
+        console.log('📌 Ganti GOOGLE_SCRIPT_URL dengan URL Web App kamu.');
     </script>
+
 </body>
 </html>
