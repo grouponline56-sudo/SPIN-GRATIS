@@ -5,26 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>🎡 Spin & Win - Es Mambo</title>
     <style>
-        /* ---------- RESET & BASE ---------- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
-            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow-x: hidden;
             background: url('https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=1920&q=80') no-repeat center center fixed;
             background-size: cover;
             position: relative;
-            padding: 20px 0;
+            padding: 20px;
         }
-
         body::before {
             content: '';
             position: fixed;
@@ -32,173 +28,46 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(8, 5, 25, 0.70);
+            background: rgba(8, 5, 25, 0.7);
             backdrop-filter: blur(2px);
             z-index: 0;
         }
-
-        /* ---------- BACKGROUND PARTICLES ---------- */
-        .bg-particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-        }
-        .bg-particles span {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: rgba(255, 215, 0, 0.25);
-            border-radius: 50%;
-            animation: floatUp linear infinite;
-        }
-        .bg-particles span:nth-child(1) {
-            left: 10%;
-            animation-duration: 14s;
-            animation-delay: 0s;
-            width: 8px;
-            height: 8px;
-        }
-        .bg-particles span:nth-child(2) {
-            left: 25%;
-            animation-duration: 18s;
-            animation-delay: 2s;
-        }
-        .bg-particles span:nth-child(3) {
-            left: 40%;
-            animation-duration: 12s;
-            animation-delay: 4s;
-            width: 10px;
-            height: 10px;
-        }
-        .bg-particles span:nth-child(4) {
-            left: 55%;
-            animation-duration: 16s;
-            animation-delay: 1s;
-        }
-        .bg-particles span:nth-child(5) {
-            left: 70%;
-            animation-duration: 20s;
-            animation-delay: 3s;
-            width: 7px;
-            height: 7px;
-        }
-        .bg-particles span:nth-child(6) {
-            left: 85%;
-            animation-duration: 15s;
-            animation-delay: 5s;
-        }
-        .bg-particles span:nth-child(7) {
-            left: 50%;
-            animation-duration: 22s;
-            animation-delay: 0.5s;
-            width: 12px;
-            height: 12px;
-        }
-        .bg-particles span:nth-child(8) {
-            left: 15%;
-            animation-duration: 17s;
-            animation-delay: 3.5s;
-        }
-        .bg-particles span:nth-child(9) {
-            left: 65%;
-            animation-duration: 13s;
-            animation-delay: 2.5s;
-            width: 5px;
-            height: 5px;
-        }
-        .bg-particles span:nth-child(10) {
-            left: 35%;
-            animation-duration: 19s;
-            animation-delay: 4.5s;
-        }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(100vh) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-10vh) scale(1);
-                opacity: 0;
-            }
-        }
-
-        /* ---------- GLOW ORBES ---------- */
-        .glow-orbe {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(120px);
-            pointer-events: none;
-            z-index: 1;
-        }
-        .glow-orbe.o1 {
-            width: 400px;
-            height: 400px;
-            background: rgba(255, 100, 200, 0.15);
-            top: -100px;
-            right: -100px;
-        }
-        .glow-orbe.o2 {
-            width: 500px;
-            height: 500px;
-            background: rgba(0, 200, 255, 0.10);
-            bottom: -150px;
-            left: -150px;
-        }
-
-        /* ---------- CONTAINER ---------- */
         .app-container {
             position: relative;
             z-index: 2;
             width: 100%;
             max-width: 600px;
-            padding: 20px;
             margin: 0 auto;
         }
-
-        /* ---------- CARD ---------- */
         .card {
             background: rgba(255, 255, 255, 0.06);
             backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
             border-radius: 48px;
             padding: 30px 24px 36px;
-            border: 1px solid rgba(255, 255, 255, 0.10);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6),
-                inset 0 1px 0 rgba(255, 255, 255, 0.08);
-            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+        }
+        .hidden {
+            display: none !important;
         }
 
-        /* ---------- LOGIN SCREEN ---------- */
+        /* ---------- LOGIN ---------- */
         .login-screen {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 30px 20px 20px;
+            padding: 30px 20px;
             text-align: center;
-            min-height: 460px;
         }
         .login-screen .logo-big {
             font-size: 72px;
-            margin-bottom: 8px;
             animation: float 3s ease-in-out infinite;
         }
         @keyframes float {
             0%,
             100% {
-                transform: translateY(0px);
+                transform: translateY(0);
             }
             50% {
                 transform: translateY(-12px);
@@ -218,7 +87,6 @@
         }
         .login-screen .sub strong {
             color: #f9d976;
-            font-weight: 600;
         }
         .login-input-group {
             width: 100%;
@@ -235,18 +103,10 @@
             color: #fff;
             font-size: 16px;
             outline: none;
-            transition: all 0.3s;
             text-align: center;
-            letter-spacing: 1px;
-        }
-        .login-input-group input::placeholder {
-            color: #666;
-            letter-spacing: 0;
         }
         .login-input-group input:focus {
             border-color: rgba(249, 217, 118, 0.5);
-            box-shadow: 0 0 30px rgba(249, 217, 118, 0.05);
-            background: rgba(255, 255, 255, 0.08);
         }
         .login-input-group .login-btn {
             padding: 16px;
@@ -257,15 +117,11 @@
             font-size: 18px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.25s;
-            box-shadow: 0 8px 32px rgba(243, 156, 18, 0.25);
+            transition: 0.3s;
         }
         .login-input-group .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(243, 156, 18, 0.4);
-        }
-        .login-input-group .login-btn:active {
-            transform: scale(0.96);
+            box-shadow: 0 8px 32px rgba(243, 156, 18, 0.4);
         }
         .login-error {
             color: #ff6b6b;
@@ -273,27 +129,23 @@
             min-height: 22px;
             margin-top: 6px;
         }
-        .login-screen .footer-note {
+        .footer-note {
             margin-top: 24px;
             font-size: 12px;
             color: #555;
         }
 
-        /* ---------- GAME HEADER ---------- */
+        /* ---------- GAME ---------- */
         .game-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            padding: 0 4px;
         }
         .game-header .brand {
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-        .game-header .brand .icon {
-            font-size: 32px;
         }
         .game-header .brand h1 {
             font-size: 22px;
@@ -302,8 +154,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            letter-spacing: -0.5px;
-            text-shadow: 0 0 40px rgba(243, 156, 18, 0.2);
         }
         .game-header .user-badge {
             background: rgba(255, 255, 255, 0.08);
@@ -326,15 +176,11 @@
             color: #ff6b6b;
             cursor: pointer;
             font-size: 14px;
-            padding: 0 4px;
-            transition: 0.2s;
         }
         .game-header .user-badge .logout-btn:hover {
             color: #ff4757;
-            transform: scale(1.1);
         }
 
-        /* ---------- WHEEL ---------- */
         .wheel-wrapper {
             position: relative;
             width: 100%;
@@ -347,19 +193,17 @@
             height: 100% !important;
             display: block;
             border-radius: 50%;
-            box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.20),
-                0 0 60px rgba(255, 215, 0, 0.10),
-                inset 0 0 60px rgba(0, 0, 0, 0.3);
-            transition: box-shadow 0.3s;
-            cursor: pointer;
+            box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.2), 0 0 60px rgba(255, 215, 0, 0.1);
         }
-        .wheel-wrapper canvas:hover {
-            box-shadow: 0 0 0 8px rgba(255, 215, 0, 0.30),
-                0 0 80px rgba(255, 215, 0, 0.15),
-                inset 0 0 60px rgba(0, 0, 0, 0.3);
+        .pointer {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 6;
+            font-size: 34px;
+            filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.6));
         }
-
-        /* ---------- CENTER PIN ---------- */
         .center-pin {
             position: absolute;
             top: 50%;
@@ -369,25 +213,14 @@
             height: 60px;
             border-radius: 50%;
             background: radial-gradient(circle at 35% 35%, #fff, #f0d060);
-            box-shadow: 0 0 0 8px rgba(255, 215, 0, 0.25),
-                0 0 40px rgba(255, 215, 0, 0.3),
-                inset 0 -4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 0 8px rgba(255, 215, 0, 0.25), 0 0 40px rgba(255, 215, 0, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 28px;
-            font-weight: 700;
             color: #8b6b00;
             pointer-events: none;
             z-index: 5;
-            user-select: none;
-            border: 2px solid rgba(255, 215, 0, 0.4);
-            transition: all 0.3s;
-        }
-        .center-pin .spin-icon {
-            font-size: 28px;
-            line-height: 1;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
         .center-pin.spinning {
             animation: pulse 0.6s infinite alternate;
@@ -395,28 +228,12 @@
         @keyframes pulse {
             0% {
                 transform: translate(-50%, -50%) scale(1);
-                box-shadow: 0 0 0 8px rgba(255, 215, 0, 0.25), 0 0 40px rgba(255, 215, 0, 0.3);
             }
             100% {
                 transform: translate(-50%, -50%) scale(1.08);
-                box-shadow: 0 0 0 14px rgba(255, 215, 0, 0.35), 0 0 60px rgba(255, 215, 0, 0.5);
             }
         }
 
-        .pointer {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 6;
-            font-size: 34px;
-            filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.6));
-            line-height: 1;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-            pointer-events: none;
-        }
-
-        /* ---------- ACTION ---------- */
         .action-area {
             display: flex;
             flex-direction: column;
@@ -433,63 +250,22 @@
             font-weight: 700;
             color: #1a1a2e;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: 0.25s;
             box-shadow: 0 8px 32px rgba(243, 156, 18, 0.35);
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            position: relative;
-            overflow: hidden;
             width: 100%;
             max-width: 280px;
+            display: flex;
+            align-items: center;
             justify-content: center;
-        }
-        .spin-btn::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border-radius: 60px;
-            background: linear-gradient(135deg, #f9d976, #f39c12, #f9d976);
-            background-size: 300% 300%;
-            z-index: -1;
-            animation: shimmer 3s ease infinite;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .spin-btn:hover::before {
-            opacity: 1;
-        }
-        .spin-btn:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 12px 40px rgba(243, 156, 18, 0.5);
-        }
-        .spin-btn:active {
-            transform: scale(0.96);
-            box-shadow: 0 4px 16px rgba(243, 156, 18, 0.3);
+            gap: 12px;
         }
         .spin-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            transform: none;
-            box-shadow: 0 4px 16px rgba(243, 156, 18, 0.15);
         }
-        @keyframes shimmer {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-        .spin-btn .btn-icon {
-            font-size: 24px;
+        .spin-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(243, 156, 18, 0.5);
         }
 
         .rules {
@@ -498,7 +274,6 @@
             gap: 16px;
             flex-wrap: wrap;
             margin-top: 12px;
-            padding: 0 4px;
         }
         .rules .rule-item {
             background: rgba(255, 255, 255, 0.06);
@@ -510,10 +285,6 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            backdrop-filter: blur(4px);
-        }
-        .rules .rule-item .emoji {
-            font-size: 14px;
         }
 
         /* ---------- DASHBOARD MENU ---------- */
@@ -527,10 +298,7 @@
             font-weight: 600;
             color: #fff;
             margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            justify-content: center;
+            text-align: center;
         }
         .dashboard-title span {
             background: linear-gradient(135deg, #f9d976, #f39c12);
@@ -549,14 +317,11 @@
             padding: 16px 12px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(4px);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            cursor: default;
+            transition: 0.2s;
         }
         .menu-item:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-            border-color: rgba(249, 217, 118, 0.2);
         }
         .product-img {
             width: 64px;
@@ -566,34 +331,15 @@
             display: block;
             margin: 0 auto 6px;
             border: 2px solid rgba(255, 215, 0, 0.2);
-            transition: transform 0.3s ease;
-        }
-        .menu-item:hover .product-img {
-            transform: scale(1.05);
-        }
-        .product-img:not([src]),
-        .product-img[src=""],
-        .product-img[src="#"] {
-            display: none;
-        }
-        .menu-item .emoji-fallback {
-            font-size: 36px;
-            display: block;
-            margin-bottom: 4px;
-        }
-        .menu-item:has(.product-img[src]:not([src=""]):not([src="#"])) .emoji-fallback {
-            display: none;
         }
         .menu-item .name {
             font-size: 14px;
             font-weight: 600;
             color: #fff;
-            margin-bottom: 2px;
         }
         .menu-item .price {
             font-size: 13px;
             color: #f9d976;
-            font-weight: 500;
         }
         .menu-item .badge {
             display: inline-block;
@@ -603,7 +349,6 @@
             padding: 2px 10px;
             border-radius: 30px;
             margin-top: 4px;
-            letter-spacing: 0.3px;
         }
 
         /* ---------- MODAL ---------- */
@@ -615,25 +360,13 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             z-index: 100;
             display: none;
             justify-content: center;
             align-items: center;
-            animation: fadeIn 0.4s ease;
         }
         .modal-overlay.show {
             display: flex;
-        }
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
         }
         .modal-box {
             background: rgba(30, 27, 55, 0.95);
@@ -643,16 +376,10 @@
             width: 92%;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
             animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            overflow: hidden;
         }
         .modal-box.win {
             border-color: rgba(249, 217, 118, 0.3);
-        }
-        .modal-box.lose {
-            border-color: rgba(255, 255, 255, 0.05);
         }
         @keyframes popIn {
             0% {
@@ -667,13 +394,11 @@
         .modal-box .result-icon {
             font-size: 72px;
             margin-bottom: 8px;
-            display: block;
         }
         .modal-box .result-title {
             font-size: 26px;
             font-weight: 700;
             color: #fff;
-            margin-bottom: 4px;
         }
         .modal-box .result-title.gold {
             background: linear-gradient(135deg, #f9d976, #f39c12);
@@ -685,50 +410,22 @@
             color: #aaa;
             font-size: 15px;
             margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        .modal-box .result-sub strong {
-            color: #fff;
         }
         .modal-box .modal-close-btn {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: linear-gradient(135deg, #f9d976, #f39c12);
+            border: none;
             padding: 14px 36px;
             border-radius: 60px;
-            color: #fff;
+            color: #1a1a2e;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.25s;
+            transition: 0.25s;
         }
         .modal-box .modal-close-btn:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: scale(1.02);
-        }
-        .modal-box .modal-close-btn.primary {
-            background: linear-gradient(135deg, #f9d976, #f39c12);
-            color: #1a1a2e;
-            border: none;
-        }
-        .modal-box .modal-close-btn.primary:hover {
             box-shadow: 0 8px 30px rgba(243, 156, 18, 0.3);
         }
-        .modal-box .sparkle-bg {
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 30% 30%, rgba(249, 217, 118, 0.03), transparent 60%);
-            pointer-events: none;
-            z-index: 0;
-        }
-        .modal-box>*:not(.sparkle-bg) {
-            position: relative;
-            z-index: 1;
-        }
 
-        /* ---------- CONFETTI ---------- */
         #confetti-canvas {
             position: fixed;
             top: 0;
@@ -739,11 +436,9 @@
             z-index: 99;
         }
 
-        /* ---------- RESPONSIVE ---------- */
         @media (max-width: 480px) {
             .card {
                 padding: 20px 16px 26px;
-                border-radius: 32px;
             }
             .game-header .brand h1 {
                 font-size: 17px;
@@ -753,9 +448,6 @@
                 height: 48px;
                 font-size: 20px;
             }
-            .center-pin .spin-icon {
-                font-size: 20px;
-            }
             .pointer {
                 font-size: 26px;
                 top: -8px;
@@ -763,39 +455,13 @@
             .spin-btn {
                 font-size: 17px;
                 padding: 14px 32px;
-                max-width: 240px;
-            }
-            .modal-box {
-                padding: 30px 20px 28px;
-            }
-            .modal-box .result-icon {
-                font-size: 56px;
-            }
-            .modal-box .result-title {
-                font-size: 22px;
-            }
-            .rules .rule-item {
-                font-size: 10px;
-                padding: 4px 12px;
             }
             .menu-grid {
                 gap: 10px;
             }
-            .menu-item {
-                padding: 12px 8px;
-            }
             .product-img {
                 width: 50px;
                 height: 50px;
-            }
-            .menu-item .name {
-                font-size: 12px;
-            }
-            .menu-item .price {
-                font-size: 11px;
-            }
-            .dashboard-title {
-                font-size: 16px;
             }
             .login-screen h2 {
                 font-size: 22px;
@@ -804,69 +470,16 @@
                 font-size: 54px;
             }
         }
-
-        @media (max-width: 380px) {
-            .game-header .brand h1 {
-                font-size: 15px;
-            }
-            .center-pin {
-                width: 40px;
-                height: 40px;
-                font-size: 16px;
-            }
-            .center-pin .spin-icon {
-                font-size: 16px;
-            }
-            .spin-btn {
-                font-size: 15px;
-                padding: 12px 24px;
-            }
-            .menu-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 8px;
-            }
-            .product-img {
-                width: 42px;
-                height: 42px;
-            }
-        }
-
-        /* ---------- UTILITY ---------- */
-        .hidden {
-            display: none !important;
-        }
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 215, 0, 0.3);
-            border-radius: 10px;
-        }
     </style>
 </head>
 <body>
 
-    <!-- ====== BACKGROUND ====== -->
-    <div class="bg-particles">
-        <span></span><span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span><span></span>
-    </div>
-    <div class="glow-orbe o1"></div>
-    <div class="glow-orbe o2"></div>
+    <div id="confetti-canvas"></div>
 
-    <!-- ====== CONFETTI ====== -->
-    <canvas id="confetti-canvas"></canvas>
-
-    <!-- ====== APP CONTAINER ====== -->
     <div class="app-container">
-
-        <!-- ====== CARD ====== -->
         <div class="card">
 
-            <!-- ======= LOGIN SCREEN ======= -->
+            <!-- LOGIN -->
             <div id="loginScreen">
                 <div class="login-screen">
                     <div class="logo-big">🍧</div>
@@ -876,101 +489,79 @@
                         oleh admin untuk memutar roda dan menangkan hadiah!
                     </p>
                     <div class="login-input-group">
-                        <input
-                        type="text"
-                        id="loginIdInput"
-                        placeholder="Masukkan ID Anda"
-                        autocomplete="off"
-                        maxlength="30"
-                        />
+                        <input type="text" id="loginIdInput" placeholder="Masukkan ID Anda" autocomplete="off" />
                         <button class="login-btn" id="loginBtn">🚀 Masuk</button>
                         <div class="login-error" id="loginError"></div>
                     </div>
-                    <div class="footer-note">
-                        * Hanya untuk satu orang yang memiliki ID khusus
-                    </div>
+                    <div class="footer-note">* Hanya untuk satu orang yang memiliki ID khusus</div>
                 </div>
             </div>
 
-            <!-- ======= GAME SCREEN ======= -->
+            <!-- GAME -->
             <div id="gameScreen" class="hidden">
-                <!-- HEADER -->
                 <div class="game-header">
                     <div class="brand">
-                        <span class="icon">🍧</span>
+                        <span style="font-size:28px;">🍧</span>
                         <h1>Es Mambo Spin</h1>
                     </div>
                     <div class="user-badge">
                         👤 <span id="currentUser">—</span>
-                        <button class="logout-btn" id="logoutBtn" title="Keluar">✕</button>
+                        <button class="logout-btn" id="logoutBtn">✕</button>
                     </div>
                 </div>
 
-                <!-- WHEEL -->
                 <div class="wheel-wrapper">
                     <canvas id="wheelCanvas" width="600" height="600"></canvas>
                     <div class="pointer">▼</div>
-                    <div class="center-pin" id="centerPin">
-                        <span class="spin-icon">🎯</span>
-                    </div>
+                    <div class="center-pin" id="centerPin">🎯</div>
                 </div>
 
-                <!-- ACTION -->
                 <div class="action-area">
                     <button class="spin-btn" id="spinBtn">
-                        <span class="btn-icon">🎡</span> PUTAR RODA
+                        <span>🎡</span> PUTAR RODA
                     </button>
                     <div class="rules">
-                        <span class="rule-item"><span class="emoji">🛒</span> Min. Beli 20K</span>
-                        <span class="rule-item"><span class="emoji">🎁</span> Hadiah Menarik</span>
-                        <span class="rule-item"><span class="emoji">📊</span> Data Terekam</span>
+                        <span class="rule-item">🛒 Min. Beli 20K</span>
+                        <span class="rule-item">🎁 Hadiah Menarik</span>
+                        <span class="rule-item">📊 Data Terekam</span>
                     </div>
                 </div>
 
-                <!-- DASHBOARD MENU -->
                 <div class="dashboard">
-                    <div class="dashboard-title">
-                        🍧 <span>Menu Es Mambo</span> 🍧
-                    </div>
+                    <div class="dashboard-title">🍧 <span>Menu Es Mambo</span> 🍧</div>
                     <div class="menu-grid">
                         <div class="menu-item">
                             <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center" alt="Mambo Original" class="product-img" />
-                            <span class="emoji-fallback">🍦</span>
                             <div class="name">Mambo Original</div>
                             <div class="price">Rp 15.000</div>
                             <span class="badge">Best Seller</span>
                         </div>
                         <div class="menu-item">
                             <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center&auto=format&fit=crop&w=150&h=150&q=80" alt="Mambo Strawberry" class="product-img" />
-                            <span class="emoji-fallback">🍓</span>
                             <div class="name">Mambo Strawberry</div>
                             <div class="price">Rp 18.000</div>
                             <span class="badge">Favorit</span>
                         </div>
                         <div class="menu-item">
                             <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center&auto=format&fit=crop&w=150&h=150&q=80" alt="Mambo Coklat" class="product-img" />
-                            <span class="emoji-fallback">🍫</span>
                             <div class="name">Mambo Coklat</div>
                             <div class="price">Rp 18.000</div>
                             <span class="badge">Nyoklat</span>
                         </div>
                         <div class="menu-item">
                             <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center&auto=format&fit=crop&w=150&h=150&q=80" alt="Mambo Kelapa" class="product-img" />
-                            <span class="emoji-fallback">🥥</span>
                             <div class="name">Mambo Kelapa</div>
                             <div class="price">Rp 20.000</div>
                             <span class="badge">Segar</span>
                         </div>
                         <div class="menu-item">
                             <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center&auto=format&fit=crop&w=150&h=150&q=80" alt="Mambo Pisang" class="product-img" />
-                            <span class="emoji-fallback">🍌</span>
                             <div class="name">Mambo Pisang</div>
                             <div class="price">Rp 17.000</div>
                             <span class="badge">Spesial</span>
                         </div>
                         <div class="menu-item">
                             <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center&auto=format&fit=crop&w=150&h=150&q=80" alt="Mambo Es Campur" class="product-img" />
-                            <span class="emoji-fallback">🧊</span>
                             <div class="name">Mambo Es Campur</div>
                             <div class="price">Rp 22.000</div>
                             <span class="badge">Mega</span>
@@ -978,49 +569,40 @@
                     </div>
                 </div>
             </div>
-            <!-- END GAME SCREEN -->
 
         </div>
-        <!-- END CARD -->
-
     </div>
-    <!-- END APP CONTAINER -->
 
-    <!-- ====== RESULT MODAL ====== -->
+    <!-- MODAL -->
     <div class="modal-overlay" id="resultModal">
         <div class="modal-box" id="modalBox">
-            <div class="sparkle-bg"></div>
             <span class="result-icon" id="resultIcon">🎉</span>
             <div class="result-title" id="resultTitle">Selamat!</div>
             <div class="result-sub" id="resultSub">Anda mendapatkan hadiah!</div>
-            <button class="modal-close-btn primary" id="modalCloseBtn">👍 Mantap!</button>
+            <button class="modal-close-btn" id="modalCloseBtn">👍 Mantap!</button>
         </div>
     </div>
 
     <script>
         // ================================================================
-        //  KONFIGURASI
+        //  KONFIGURASI - GANTI URL INI
         // ================================================================
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJs4eKzCV_-0QR7d1ukIAkXer2vpH3D9TEuX1IFbipwrfiGT8ALJnLO_R4sHcreb10/exec'; // GANTI
 
-        // --- GANTI dengan URL Web App kamu ---
-        const GOOGLE_SCRIPT_URL = '  https://script.google.com/macros/s/AKfycbwdMJaRAlon2dGf0gBRx92Ialrr7r0sr6Nd0Ckm6GHpllCQPZX6CNJLNpntBKGs2ye9/exec ';
-
-        // --- Data hadiah (8 segmen) ---
+        // ================================================================
+        //  DATA HADIAH
+        // ================================================================
         const PRIZES = [
-            { label: 'Free 1 Cup 🍧', type: 'win', emoji: '🍧' },
-            { label: 'Voucher 10K 🎫', type: 'win', emoji: '🎫' },
-            { label: 'Free Topping 🍓', type: 'win', emoji: '🍓' },
-            { label: '50% Off 💰', type: 'win', emoji: '💰' },
-            { label: 'Free 2 Cups 🥤', type: 'win', emoji: '🥤' },
-            { label: 'Voucher 5K 🎟️', type: 'win', emoji: '🎟️' },
-            { label: 'Free Large 📏', type: 'win', emoji: '📏' },
-            { label: 'Coba Lagi 🔄', type: 'lose', emoji: '😅' },
+            { label: 'Free 1 Cup 🍧', type: 'win' },
+            { label: 'Voucher 10K 🎫', type: 'win' },
+            { label: 'Free Topping 🍓', type: 'win' },
+            { label: '50% Off 💰', type: 'win' },
+            { label: 'Free 2 Cups 🥤', type: 'win' },
+            { label: 'Voucher 5K 🎟️', type: 'win' },
+            { label: 'Free Large 📏', type: 'win' },
+            { label: 'Coba Lagi 🔄', type: 'lose' },
         ];
-
-        const SEGMENT_COLORS = [
-            '#FF6B6B', '#FFB347', '#F9D976', '#6BCB77',
-            '#4D96FF', '#9B59B6', '#FF6B9D', '#00C9A7'
-        ];
+        const SEGMENT_COLORS = ['#FF6B6B', '#FFB347', '#F9D976', '#6BCB77', '#4D96FF', '#9B59B6', '#FF6B9D', '#00C9A7'];
 
         // ================================================================
         //  STATE
@@ -1049,11 +631,10 @@
         const resultTitle = document.getElementById('resultTitle');
         const resultSub = document.getElementById('resultSub');
         const modalCloseBtn = document.getElementById('modalCloseBtn');
-
         const ctx = wheelCanvas.getContext('2d');
 
         // ================================================================
-        //  CONFETTI ENGINE
+        //  CONFETTI
         // ================================================================
         const confettiCanvas = document.getElementById('confetti-canvas');
         const confCtx = confettiCanvas.getContext('2d');
@@ -1146,112 +727,87 @@
         //  GAMBAR RODA
         // ================================================================
         function drawWheel(rotation) {
-            const w = wheelCanvas.width;
-            const h = wheelCanvas.height;
-            const cx = w / 2;
-            const cy = h / 2;
+            const w = wheelCanvas.width,
+                h = wheelCanvas.height;
+            const cx = w / 2,
+                cy = h / 2;
             const r = Math.min(w, h) * 0.42;
             const n = PRIZES.length;
             const arc = (2 * Math.PI) / n;
 
             ctx.clearRect(0, 0, w, h);
-
-            ctx.shadowColor = 'rgba(0,0,0,0.3)';
-            ctx.shadowBlur = 30;
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 4;
-
             for (let i = 0; i < n; i++) {
                 const startAngle = i * arc + rotation;
                 const endAngle = startAngle + arc;
-                const color = SEGMENT_COLORS[i % SEGMENT_COLORS.length];
-
                 ctx.beginPath();
                 ctx.moveTo(cx, cy);
                 ctx.arc(cx, cy, r, startAngle, endAngle);
                 ctx.closePath();
-                ctx.fillStyle = color;
+                ctx.fillStyle = SEGMENT_COLORS[i % SEGMENT_COLORS.length];
                 ctx.fill();
-
-                ctx.shadowBlur = 0;
                 ctx.strokeStyle = 'rgba(255,255,255,0.2)';
                 ctx.lineWidth = 1.5;
                 ctx.stroke();
-                ctx.shadowBlur = 30;
 
                 const midAngle = startAngle + arc / 2;
-                const textR = r * 0.68;
-                const tx = cx + textR * Math.cos(midAngle);
-                const ty = cy + textR * Math.sin(midAngle);
-
+                const tx = cx + r * 0.65 * Math.cos(midAngle);
+                const ty = cy + r * 0.65 * Math.sin(midAngle);
                 ctx.save();
                 ctx.translate(tx, ty);
                 ctx.rotate(midAngle + (midAngle > Math.PI / 2 ? Math.PI : 0));
-                ctx.shadowBlur = 0;
                 ctx.fillStyle = '#fff';
-                ctx.font = 'bold 19px "Segoe UI", "Poppins", system-ui, sans-serif';
+                ctx.font = 'bold 16px "Segoe UI"';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.shadowColor = 'rgba(0,0,0,0.5)';
                 ctx.shadowBlur = 8;
-                ctx.fillText(PRIZES[i].emoji + ' ' + PRIZES[i].label.split(' ').slice(0, 2).join(' '), 0, 0);
+                ctx.fillText(PRIZES[i].label.split(' ').slice(0, 2).join(' '), 0, 0);
                 ctx.restore();
             }
-
-            ctx.shadowBlur = 0;
             ctx.beginPath();
             ctx.arc(cx, cy, r * 0.12, 0, 2 * Math.PI);
-            ctx.fillStyle = 'rgba(255,215,0,0.15)';
+            ctx.fillStyle = 'rgba(255,215,0,0.2)';
             ctx.fill();
-
-            ctx.beginPath();
-            ctx.arc(cx, cy, r, 0, 2 * Math.PI);
             ctx.strokeStyle = 'rgba(255,215,0,0.15)';
             ctx.lineWidth = 3;
+            ctx.arc(cx, cy, r, 0, 2 * Math.PI);
             ctx.stroke();
-
-            ctx.shadowBlur = 0;
         }
 
         // ================================================================
-        //  SPIN LOGIC
+        //  SPIN
         // ================================================================
         function getPrizeIndex(rotation) {
             const n = PRIZES.length;
             const arc = (2 * Math.PI) / n;
-            const pointerAngle = -Math.PI / 2;
-            let angle = (pointerAngle - rotation) % (2 * Math.PI);
+            let angle = (-Math.PI / 2 - rotation) % (2 * Math.PI);
             if (angle < 0) angle += 2 * Math.PI;
             return Math.floor(angle / arc) % n;
         }
 
         function spinWheel() {
-            if (isSpinning) return;
-            if (!currentUser) return;
-
+            if (isSpinning || !currentUser) return;
             isSpinning = true;
             spinBtn.disabled = true;
-            spinBtn.innerHTML = '<span class="btn-icon">⏳</span> Memutar...';
+            spinBtn.innerHTML = '⏳ Memutar...';
             centerPin.classList.add('spinning');
 
-            const extraSpins = 5 + Math.random() * 3;
-            const targetAngle = Math.random() * 2 * Math.PI;
-            const totalRotation = extraSpins * 2 * Math.PI + targetAngle;
+            const extra = 5 + Math.random() * 3;
+            const totalRotation = extra * 2 * Math.PI + Math.random() * 2 * Math.PI;
             const startRotation = currentRotation;
             const endRotation = startRotation + totalRotation;
             const duration = 4000 + Math.random() * 1500;
             const startTime = performance.now();
 
-            function animateSpin(time) {
+            function animate(time) {
                 const elapsed = time - startTime;
                 const progress = Math.min(elapsed / duration, 1);
                 const eased = 1 - Math.pow(1 - progress, 3);
                 const rot = startRotation + totalRotation * eased;
                 currentRotation = rot;
                 drawWheel(rot);
-
                 if (progress < 1) {
-                    animationId = requestAnimationFrame(animateSpin);
+                    requestAnimationFrame(animate);
                 } else {
                     currentRotation = endRotation;
                     drawWheel(endRotation);
@@ -1259,81 +815,70 @@
                     const prize = PRIZES[idx];
                     isSpinning = false;
                     spinBtn.disabled = false;
-                    spinBtn.innerHTML = '<span class="btn-icon">🎡</span> PUTAR RODA';
+                    spinBtn.innerHTML = '🎡 PUTAR RODA';
                     centerPin.classList.remove('spinning');
-
-                    showResult(prize, idx);
+                    showResult(prize);
                 }
             }
-            animationId = requestAnimationFrame(animateSpin);
+            requestAnimationFrame(animate);
         }
 
         // ================================================================
         //  RESULT
         // ================================================================
-        function showResult(prize, index) {
+        function showResult(prize) {
             const isWin = prize.type === 'win';
-
             resultIcon.textContent = isWin ? '🎉' : '😅';
             resultTitle.textContent = isWin ? '🎊 SELAMAT!' : 'Yah, coba lagi!';
             resultTitle.className = 'result-title' + (isWin ? ' gold' : '');
             resultSub.innerHTML = isWin ?
                 `Anda mendapatkan <strong>${prize.label}</strong>! 🎁<br>Hadiah akan segera diproses.` :
                 `Kurang beruntung kali ini.<br>Jangan menyerah, spin lagi! 🔄`;
-
-            modalBox.className = 'modal-box' + (isWin ? ' win' : ' lose');
+            modalBox.className = 'modal-box' + (isWin ? ' win' : '');
 
             if (isWin) {
-                // Kirim userId yang login
                 sendWinData(currentUser, prize.label);
                 startConfetti(180);
             } else {
                 stopConfetti();
             }
-
             resultModal.classList.add('show');
         }
 
         // ================================================================
-        //  GOOGLE SHEETS API
+        //  API CALLS
         // ================================================================
         async function validateLoginId(userId) {
             try {
-                const payload = { action: 'validate', userId: userId };
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                const res = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({ action: 'validate', userId })
                 });
-                if (!response.ok) throw new Error('Network error');
-                const data = await response.json();
+                const data = await res.json();
                 return data.valid === true;
-            } catch (err) {
-                console.warn('⚠️ Gagal validasi, coba fallback:', err);
-                // Fallback: jika tidak bisa connect, kita hardcode satu ID
-                // Ganti dengan ID yang Anda inginkan
-                const FALLBACK_ID = 'VIP_ESMAMBO';
-                return userId === FALLBACK_ID;
+            } catch (e) {
+                console.warn('Fallback validasi:', e);
+                return userId === 'VIP_ESMAMBO';
             }
         }
 
-        async function sendWinData(userId, prizeLabel) {
+        async function sendWinData(userId, prize) {
             try {
-                const payload = {
-                    action: 'recordWin',
-                    userId: userId,
-                    prize: prizeLabel,
-                    timestamp: new Date().toISOString()
-                };
                 await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({
+                        action: 'recordWin',
+                        userId,
+                        prize,
+                        timestamp: new Date().toISOString()
+                    })
                 });
-                console.log('✅ Data kemenangan terkirim ke Google Sheets');
-            } catch (err) {
-                console.warn('⚠️ Gagal mengirim ke Google Sheets:', err);
+                console.log('✅ Data terkirim');
+            } catch (e) {
+                console.warn('Gagal kirim data:', e);
             }
         }
 
@@ -1343,10 +888,9 @@
         async function handleLogin() {
             const id = loginIdInput.value.trim();
             if (!id) {
-                loginError.textContent = '⚠️ Masukkan ID terlebih dahulu.';
+                loginError.textContent = '⚠️ Masukkan ID.';
                 return;
             }
-
             loginBtn.disabled = true;
             loginBtn.textContent = '⏳ Memeriksa...';
             loginError.textContent = '';
@@ -1359,16 +903,13 @@
                     loginScreen.classList.add('hidden');
                     gameScreen.classList.remove('hidden');
                     drawWheel(currentRotation);
-                    loginError.textContent = '';
                     loginIdInput.value = '';
                 } else {
-                    loginError.textContent = '❌ ID tidak dikenali. Hubungi admin.';
+                    loginError.textContent = '❌ ID tidak dikenali.';
                 }
-            } catch (err) {
-                loginError.textContent = '⚠️ Gagal terhubung ke server. Coba lagi.';
-                console.error(err);
+            } catch (e) {
+                loginError.textContent = '⚠️ Gagal koneksi.';
             }
-
             loginBtn.disabled = false;
             loginBtn.textContent = '🚀 Masuk';
         }
@@ -1391,20 +932,14 @@
         //  EVENTS
         // ================================================================
         loginBtn.addEventListener('click', handleLogin);
-        loginIdInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') handleLogin();
-        });
-
+        loginIdInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
         logoutBtn.addEventListener('click', handleLogout);
-
         spinBtn.addEventListener('click', spinWheel);
-
         modalCloseBtn.addEventListener('click', () => {
             resultModal.classList.remove('show');
             stopConfetti();
         });
-
-        resultModal.addEventListener('click', (e) => {
+        resultModal.addEventListener('click', e => {
             if (e.target === resultModal) {
                 resultModal.classList.remove('show');
                 stopConfetti();
@@ -1412,25 +947,11 @@
         });
 
         // ================================================================
-        //  RESIZE WHEEL
-        // ================================================================
-        function resizeWheel() {
-            drawWheel(currentRotation);
-        }
-        window.addEventListener('resize', resizeWheel);
-
-        // ================================================================
         //  INIT
         // ================================================================
         drawWheel(0);
-        resizeWheel();
-
-        // Fokus ke input login
         loginIdInput.focus();
-
-        console.log('🍧 Es Mambo Spin & Win (Login khusus) siap!');
-        console.log('📌 Ganti GOOGLE_SCRIPT_URL dengan URL Web App kamu.');
-        console.log('📌 Pastikan sheet "Users" berisi ID yang diizinkan.');
+        console.log('🍧 Es Mambo siap!');
     </script>
 </body>
 </html>
