@@ -1,903 +1,131 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🎡 Spin & Win - Es Mambo</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: url('https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=1920&q=80') no-repeat center center fixed;
-            background-size: cover;
-            position: relative;
-            padding: 20px;
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(8, 5, 25, 0.70);
-            backdrop-filter: blur(2px);
-            z-index: 0;
-        }
-        .app-container {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .card {
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(24px);
-            border-radius: 48px;
-            padding: 30px 24px 36px;
-            border: 1px solid rgba(255, 255, 255, 0.10);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
-        }
-        .hidden {
-            display: none !important;
-        }
-
-        /* ===== LOGIN ===== */
-        .login-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 10px;
-            text-align: center;
-        }
-        .login-screen .logo {
-            font-size: 72px;
-            margin-bottom: 10px;
-        }
-        .login-screen h2 {
-            font-size: 28px;
-            color: #fff;
-            margin-bottom: 6px;
-        }
-        .login-screen p {
-            color: #aaa;
-            font-size: 15px;
-            margin-bottom: 24px;
-            max-width: 300px;
-        }
-        .login-input-group {
-            width: 100%;
-            max-width: 320px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .login-input-group input {
-            padding: 16px 20px;
-            border-radius: 60px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-            font-size: 16px;
-            outline: none;
-            text-align: center;
-        }
-        .login-input-group input::placeholder {
-            color: #666;
-        }
-        .login-input-group input:focus {
-            border-color: #f9d976;
-        }
-        .login-btn {
-            padding: 16px;
-            border-radius: 60px;
-            border: none;
-            background: linear-gradient(135deg, #f9d976, #f39c12);
-            color: #1a1a2e;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.25s;
-        }
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(243, 156, 18, 0.4);
-        }
-        .login-error {
-            color: #ff6b6b;
-            font-size: 14px;
-            min-height: 24px;
-            margin-top: 6px;
-        }
-        .login-footer {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #555;
-        }
-
-        /* ===== GAME ===== */
-        .game-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .game-header .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 22px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #f9d976, #f39c12);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .game-header .user-badge {
-            background: rgba(255, 255, 255, 0.08);
-            padding: 6px 16px;
-            border-radius: 100px;
-            font-size: 13px;
-            color: #aaa;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .game-header .user-badge span {
-            color: #fff;
-            font-weight: 600;
-        }
-        .game-header .logout-btn {
-            background: none;
-            border: none;
-            color: #ff6b6b;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        /* ===== WHEEL ===== */
-        .wheel-wrapper {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1/1;
-            max-width: 420px;
-            margin: 0 auto 12px;
-        }
-        .wheel-wrapper canvas {
-            width: 100% !important;
-            height: 100% !important;
-            display: block;
-            border-radius: 50%;
-            box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.20), 0 0 60px rgba(255, 215, 0, 0.10);
-        }
-        .pointer {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 6;
-            font-size: 34px;
-            filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.6));
-            pointer-events: none;
-        }
-        .center-pin {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 35% 35%, #fff, #f0d060);
-            box-shadow: 0 0 0 8px rgba(255, 215, 0, 0.25);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            pointer-events: none;
-            z-index: 5;
-        }
-        .center-pin.spinning {
-            animation: pulse 0.6s infinite alternate;
-        }
-        @keyframes pulse {
-            0% {
-                transform: translate(-50%, -50%) scale(1);
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(1.08);
-            }
-        }
-
-        /* ===== ACTION ===== */
-        .action-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 14px;
-            margin-top: 6px;
-        }
-        .spin-btn {
-            background: linear-gradient(135deg, #f9d976, #f39c12);
-            border: none;
-            padding: 16px 48px;
-            border-radius: 60px;
-            font-size: 20px;
-            font-weight: 700;
-            color: #1a1a2e;
-            cursor: pointer;
-            transition: all 0.25s;
-            box-shadow: 0 8px 32px rgba(243, 156, 18, 0.35);
-            width: 100%;
-            max-width: 280px;
-        }
-        .spin-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(243, 156, 18, 0.5);
-        }
-        .spin-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .rules {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .rules .rule-item {
-            background: rgba(255, 255, 255, 0.06);
-            padding: 6px 16px;
-            border-radius: 100px;
-            font-size: 12px;
-            color: #ccc;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        /* ===== DASHBOARD ===== */
-        .dashboard {
-            margin-top: 28px;
-            padding-top: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-        }
-        .dashboard-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #fff;
-            text-align: center;
-            margin-bottom: 16px;
-        }
-        .dashboard-title span {
-            color: #f9d976;
-        }
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
-        }
-        .menu-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 16px 12px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: transform 0.2s;
-        }
-        .menu-item:hover {
-            transform: translateY(-4px);
-        }
-        .product-img {
-            width: 64px;
-            height: 64px;
-            object-fit: cover;
-            border-radius: 50%;
-            display: block;
-            margin: 0 auto 6px;
-            border: 2px solid rgba(255, 215, 0, 0.2);
-        }
-        .menu-item .name {
-            font-size: 14px;
-            font-weight: 600;
-            color: #fff;
-        }
-        .menu-item .price {
-            font-size: 13px;
-            color: #f9d976;
-        }
-        .menu-item .badge {
-            display: inline-block;
-            background: rgba(249, 217, 118, 0.15);
-            color: #f9d976;
-            font-size: 10px;
-            padding: 2px 10px;
-            border-radius: 30px;
-            margin-top: 4px;
-        }
-
-        /* ===== MODAL ===== */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(12px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-        }
-        .modal-overlay.show {
-            display: flex;
-        }
-        .modal-box {
-            background: rgba(30, 27, 55, 0.95);
-            border-radius: 48px;
-            padding: 40px 36px 36px;
-            max-width: 420px;
-            width: 92%;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        @keyframes popIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.7);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        .modal-box .result-icon {
-            font-size: 72px;
-        }
-        .modal-box .result-title {
-            font-size: 26px;
-            font-weight: 700;
-            color: #fff;
-            margin: 8px 0 4px;
-        }
-        .modal-box .result-title.gold {
-            background: linear-gradient(135deg, #f9d976, #f39c12);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .modal-box .result-sub {
-            color: #aaa;
-            font-size: 15px;
-            margin-bottom: 20px;
-        }
-        .modal-box .modal-close-btn {
-            background: linear-gradient(135deg, #f9d976, #f39c12);
-            border: none;
-            padding: 14px 36px;
-            border-radius: 60px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #1a1a2e;
-            cursor: pointer;
-        }
-
-        /* ===== CONFETTI ===== */
-        #confetti-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 99;
-        }
-
-        @media (max-width: 480px) {
-            .card {
-                padding: 20px 16px 26px;
-            }
-            .menu-grid {
-                gap: 10px;
-            }
-            .product-img {
-                width: 50px;
-                height: 50px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parkir Flat 2rb</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:Arial }
+    body { background:#f4f6f8; padding:20px }
+  .container { max-width:900px; margin:auto; background:white; padding:25px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1) }
+    h1 { text-align:center; color:#27ae60; margin-bottom:20px }
+  .box { background:#ecf0f1; padding:15px; border-radius:8px; margin-bottom:15px }
+    input, button { padding:12px; margin:5px; border:1px solid #ccc; border-radius:6px; font-size:15px }
+    button { background:#27ae60; color:white; border:none; cursor:pointer; font-weight:bold }
+    button:hover { background:#229954 }
+    button.bayar { background:#e74c3c; font-size:18px; padding:15px }
+    table { width:100%; border-collapse:collapse; margin-top:15px }
+    th, td { border:1px solid #ddd; padding:10px; text-align:center }
+    th { background:#27ae60; color:white }
+    canvas { border:2px solid #27ae60; border-radius:8px; margin-top:10px }
+  .alert { background:#d5f4e6; padding:15px; border-left:4px solid #27ae60; margin:10px 0; font-size:18px }
+  .total { font-size:32px; color:#e74c3c; font-weight:bold }
+</style>
 </head>
 <body>
+<div class="container">
+    <h1>🚗 Parkir Flat Rp2.000</h1>
+    <div class="alert"><b>Tarif:</b> Rp2.000 sekali masuk. Mau 5 menit atau 12 jam = sama</div>
 
-    <!-- CONFETTI -->
-    <canvas id="confetti-canvas"></canvas>
-
-    <div class="app-container">
-        <div class="card">
-
-            <!-- ========== LOGIN ========== -->
-            <div id="loginScreen">
-                <div class="login-screen">
-                    <div class="logo">🍧</div>
-                    <h2>Spin &amp; Win</h2>
-                    <p>Masukkan <strong>ID khusus</strong> yang diberikan admin untuk memutar roda.</p>
-                    <div class="login-input-group">
-                        <input type="text" id="loginIdInput" placeholder="Masukkan ID Anda" />
-                        <button class="login-btn" id="loginBtn">🚀 Masuk</button>
-                        <div class="login-error" id="loginError"></div>
-                    </div>
-                    <div class="login-footer">* Hanya untuk satu orang yang memiliki ID</div>
-                </div>
-            </div>
-
-            <!-- ========== GAME ========== -->
-            <div id="gameScreen" class="hidden">
-                <!-- Header -->
-                <div class="game-header">
-                    <div class="brand">🍧 Es Mambo Spin</div>
-                    <div class="user-badge">
-                        👤 <span id="currentUser">—</span>
-                        <button class="logout-btn" id="logoutBtn">✕</button>
-                    </div>
-                </div>
-
-                <!-- Wheel -->
-                <div class="wheel-wrapper">
-                    <canvas id="wheelCanvas" width="600" height="600"></canvas>
-                    <div class="pointer">▼</div>
-                    <div class="center-pin" id="centerPin">🎯</div>
-                </div>
-
-                <!-- Action -->
-                <div class="action-area">
-                    <button class="spin-btn" id="spinBtn">
-                        🎡 PUTAR RODA
-                    </button>
-                    <div class="rules">
-                        <span class="rule-item">🛒 Min. Beli 20K</span>
-                        <span class="rule-item">🎁 Hadiah Menarik</span>
-                        <span class="rule-item">📊 Data Terekam</span>
-                    </div>
-                </div>
-
-                <!-- Dashboard Menu -->
-                <div class="dashboard">
-                    <div class="dashboard-title">🍧 <span>Menu Es Mambo</span> 🍧</div>
-                    <div class="menu-grid">
-                        <div class="menu-item">
-                            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center" class="product-img" />
-                            <div class="name">Mambo Original</div>
-                            <div class="price">Rp 15.000</div>
-                            <span class="badge">Best Seller</span>
-                        </div>
-                        <div class="menu-item">
-                            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center" class="product-img" />
-                            <div class="name">Mambo Strawberry</div>
-                            <div class="price">Rp 18.000</div>
-                            <span class="badge">Favorit</span>
-                        </div>
-                        <div class="menu-item">
-                            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center" class="product-img" />
-                            <div class="name">Mambo Coklat</div>
-                            <div class="price">Rp 18.000</div>
-                            <span class="badge">Nyoklat</span>
-                        </div>
-                        <div class="menu-item">
-                            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150&h=150&fit=crop&crop=center" class="product-img" />
-                            <div class="name">Mambo Kelapa</div>
-                            <div class="price">Rp 20.000</div>
-                            <span class="badge">Segar</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+    <div class="box">
+        <h3>1. Kendaraan Masuk</h3>
+        <input type="text" id="plat" placeholder="No Plat: B 1234 CD" style="width:200px">
+        <input type="tel" id="wa" placeholder="No WA: 0812xxxx" style="width:180px">
+        <button onclick="masuk()">DAFTAR + BIKIN QR</button>
+        <div id="qrBox"></div>
     </div>
 
-    <!-- ========== MODAL ========== -->
-    <div class="modal-overlay" id="resultModal">
-        <div class="modal-box" id="modalBox">
-            <span class="result-icon" id="resultIcon">🎉</span>
-            <div class="result-title" id="resultTitle">Selamat!</div>
-            <div class="result-sub" id="resultSub">Anda mendapatkan hadiah!</div>
-            <button class="modal-close-btn" id="modalCloseBtn">👍 Mantap!</button>
-        </div>
+    <div class="box">
+        <h3>2. Kendaraan Keluar</h3>
+        <input type="text" id="platKeluar" placeholder="Ketik No Plat" style="width:200px">
+        <button class="bayar" onclick="keluar()">BAYAR Rp2.000 + KIRIM WA</button>
+        <div id="strukBox"></div>
     </div>
 
-    <script>
-        // ================================================================
-        //  KONFIGURASI
-        // ================================================================
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxjh7g5TBURa6Rj_AWS-o778I5Q1TCD14q37Nd_1nPQv3sHFlicOyZmCcZ-Mbf3aMNd/exec '; // GANTI
+    <h3>3. Kendaraan Parkir Sekarang</h3>
+    <table>
+        <thead><tr><th>No</th><th>Plat</th><th>Jam Masuk</th><th>WA</th></tr></thead>
+        <tbody id="tabel"></tbody>
+    </table>
+</div>
 
-        const PRIZES = [
-            { label: 'Free 1 Cup 🍧', type: 'win' },
-            { label: 'Voucher 10K 🎫', type: 'win' },
-            { label: 'Free Topping 🍓', type: 'win' },
-            { label: '50% Off 💰', type: 'win' },
-            { label: 'Free 2 Cups 🥤', type: 'win' },
-            { label: 'Voucher 5K 🎟️', type: 'win' },
-            { label: 'Free Large 📏', type: 'win' },
-            { label: 'Coba Lagi 🔄', type: 'lose' },
-        ];
+<script>
+let data = JSON.parse(localStorage.getItem('parkirFlat')) || [];
+const TARIF_FLAT = 2000; // Tarif tetap 2rb
 
-        const SEGMENT_COLORS = [
-            '#FF6B6B', '#FFB347', '#F9D976', '#6BCB77',
-            '#4D96FF', '#9B59B6', '#FF6B9D', '#00C9A7'
-        ];
+function simpan() {
+    localStorage.setItem('parkirFlat', JSON.stringify(data));
+    tampil();
+}
 
-        // ================================================================
-        //  STATE
-        // ================================================================
-        let currentUser = null;
-        let isSpinning = false;
-        let currentRotation = 0;
-        let animationId = null;
+function masuk() {
+    const plat = document.getElementById('plat').value.toUpperCase().trim();
+    const wa = document.getElementById('wa').value.trim();
 
-        // ================================================================
-        //  DOM REFS
-        // ================================================================
-        const loginScreen = document.getElementById('loginScreen');
-        const gameScreen = document.getElementById('gameScreen');
-        const loginIdInput = document.getElementById('loginIdInput');
-        const loginBtn = document.getElementById('loginBtn');
-        const loginError = document.getElementById('loginError');
-        const currentUserSpan = document.getElementById('currentUser');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const spinBtn = document.getElementById('spinBtn');
-        const wheelCanvas = document.getElementById('wheelCanvas');
-        const centerPin = document.getElementById('centerPin');
-        const resultModal = document.getElementById('resultModal');
-        const resultIcon = document.getElementById('resultIcon');
-        const resultTitle = document.getElementById('resultTitle');
-        const resultSub = document.getElementById('resultSub');
-        const modalCloseBtn = document.getElementById('modalCloseBtn');
+    if(!plat ||!wa) return alert('Isi plat + no WA dulu!');
+    if(data.find(k => k.plat === plat)) return alert('Plat ini masih parkir!');
 
-        const ctx = wheelCanvas.getContext('2d');
+    const waktu = Date.now();
+    const id = 'PARKIR' + waktu;
+    data.push({plat, wa, masuk:waktu, id});
+    simpan();
 
-        // ================================================================
-        //  CONFETTI
-        // ================================================================
-        const confettiCanvas = document.getElementById('confetti-canvas');
-        const confCtx = confettiCanvas.getContext('2d');
-        let confettiPieces = [];
-        let confettiRunning = false;
+    // Bikin QR
+    document.getElementById('qrBox').innerHTML = `
+        <p>✅ ${plat} berhasil masuk</p>
+        <canvas id="qr"></canvas>
+        <p>Kasih QR ini ke pelanggan</p>`;
+    QRCode.toCanvas(document.getElementById('qr'), `TIKET-${id}-PLAT-${plat}`, {width:180});
 
-        function resizeConfetti() {
-            confettiCanvas.width = window.innerWidth;
-            confettiCanvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeConfetti);
-        resizeConfetti();
+    document.getElementById('plat').value = '';
+    document.getElementById('wa').value = '';
+}
 
-        class ConfettiPiece {
-            constructor() {
-                this.reset();
-            }
-            reset() {
-                this.x = Math.random() * confettiCanvas.width;
-                this.y = Math.random() * confettiCanvas.height - confettiCanvas.height;
-                this.w = Math.random() * 8 + 4;
-                this.h = Math.random() * 6 + 3;
-                this.color = `hsl(${Math.random() * 360}, 80%, 60%)`;
-                this.vy = Math.random() * 4 + 2;
-                this.vx = (Math.random() - 0.5) * 2;
-                this.rotation = Math.random() * 360;
-                this.rotSpeed = (Math.random() - 0.5) * 8;
-                this.life = 1;
-                this.decay = 0.003 + Math.random() * 0.005;
-            }
-            update() {
-                this.x += this.vx + Math.sin(this.y * 0.02) * 0.5;
-                this.y += this.vy;
-                this.rotation += this.rotSpeed;
-                this.life -= this.decay;
-                if (this.life <= 0 || this.y > confettiCanvas.height + 50) {
-                    this.reset();
-                    this.y = -20;
-                    this.life = 1;
-                }
-            }
-            draw() {
-                confCtx.save();
-                confCtx.globalAlpha = this.life * 0.9;
-                confCtx.translate(this.x, this.y);
-                confCtx.rotate((this.rotation * Math.PI) / 180);
-                confCtx.fillStyle = this.color;
-                confCtx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
-                confCtx.restore();
-            }
-        }
+function keluar() {
+    const plat = document.getElementById('platKeluar').value.toUpperCase().trim();
+    const idx = data.findIndex(k => k.plat === plat);
+    if(idx === -1) return alert('Plat tidak ditemukan!');
 
-        function startConfetti(count = 150) {
-            if (confettiRunning) return;
-            confettiRunning = true;
-            confettiPieces = [];
-            for (let i = 0; i < count; i++) {
-                const p = new ConfettiPiece();
-                p.y = Math.random() * confettiCanvas.height * 0.5 - 100;
-                p.life = 0.6 + Math.random() * 0.4;
-                confettiPieces.push(p);
-            }
-            animateConfetti();
-        }
+    const k = data[idx];
+    const keluar = Date.now();
 
-        function animateConfetti() {
-            if (!confettiRunning) return;
-            confCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-            let alive = false;
-            for (const p of confettiPieces) {
-                p.update();
-                p.draw();
-                if (p.life > 0.01 && p.y < confettiCanvas.height + 50) alive = true;
-            }
-            if (alive) {
-                requestAnimationFrame(animateConfetti);
-            } else {
-                confettiRunning = false;
-                confCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-            }
-        }
+    const struk = `
+    <div style="text-align:center">
+        <h2>=== STRUK PARKIR ===</h2>
+        <p>Plat: <b style="font-size:24px">${k.plat}</b></p>
+        <p>Masuk: ${new Date(k.masuk).toLocaleString()}</p>
+        <p>Keluar: ${new Date(keluar).toLocaleString()}</p>
+        <hr>
+        <p>Tarif Flat</p>
+        <p class="total">Rp${TARIF_FLAT.toLocaleString()}</p>
+        <button onclick="window.print()" style="padding:15px 30px; font-size:18px; background:green; color:white; border:none">🖨️ PRINT</button>
+        <button onclick="kirimWA('${k.wa}')" style="padding:15px 30px; font-size:18px; background:#25D366; color:white; border:none">💬 KIRIM WA</button>
+    </div>`;
 
-        function stopConfetti() {
-            confettiRunning = false;
-            confettiPieces = [];
-            confCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-        }
+    document.getElementById('strukBox').innerHTML = struk;
+    window.open('', '', 'width=350,height=450').document.write(struk);
 
-        // ================================================================
-        //  DRAW WHEEL
-        // ================================================================
-        function drawWheel(rotation) {
-            const w = wheelCanvas.width;
-            const h = wheelCanvas.height;
-            const cx = w / 2,
-                cy = h / 2;
-            const r = Math.min(w, h) * 0.42;
-            const n = PRIZES.length;
-            const arc = (2 * Math.PI) / n;
+    // Hapus data = mobil keluar
+    data.splice(idx, 1);
+    simpan();
+    document.getElementById('platKeluar').value = '';
+}
 
-            ctx.clearRect(0, 0, w, h);
+function kirimWA(nomor) {
+    const pesan = `🧾 STRUK PARKIR FLAT\nPlat: ${document.getElementById('platKeluar').value.toUpperCase()}\nTarif: Rp${TARIF_FLAT.toLocaleString()}\nTerima kasih`;
+    window.open(`https://wa.me/${nomor}?text=${encodeURIComponent(pesan)}`, '_blank');
+}
 
-            for (let i = 0; i < n; i++) {
-                const startAngle = i * arc + rotation;
-                const endAngle = startAngle + arc;
-                ctx.beginPath();
-                ctx.moveTo(cx, cy);
-                ctx.arc(cx, cy, r, startAngle, endAngle);
-                ctx.closePath();
-                ctx.fillStyle = SEGMENT_COLORS[i % SEGMENT_COLORS.length];
-                ctx.fill();
-                ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-
-                const midAngle = startAngle + arc / 2;
-                const textR = r * 0.68;
-                const tx = cx + textR * Math.cos(midAngle);
-                const ty = cy + textR * Math.sin(midAngle);
-                ctx.save();
-                ctx.translate(tx, ty);
-                ctx.rotate(midAngle + (midAngle > Math.PI / 2 ? Math.PI : 0));
-                ctx.fillStyle = '#fff';
-                ctx.font = 'bold 17px "Segoe UI", sans-serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.shadowColor = 'rgba(0,0,0,0.5)';
-                ctx.shadowBlur = 6;
-                ctx.fillText(PRIZES[i].label, 0, 0);
-                ctx.restore();
-            }
-
-            // Outer ring
-            ctx.beginPath();
-            ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-            ctx.strokeStyle = 'rgba(255,215,0,0.15)';
-            ctx.lineWidth = 3;
-            ctx.stroke();
-        }
-
-        // ================================================================
-        //  SPIN LOGIC
-        // ================================================================
-        function getPrizeIndex(rotation) {
-            const n = PRIZES.length;
-            const arc = (2 * Math.PI) / n;
-            const pointerAngle = -Math.PI / 2;
-            let angle = (pointerAngle - rotation) % (2 * Math.PI);
-            if (angle < 0) angle += 2 * Math.PI;
-            return Math.floor(angle / arc) % n;
-        }
-
-        function spinWheel() {
-            if (isSpinning || !currentUser) return;
-
-            isSpinning = true;
-            spinBtn.disabled = true;
-            spinBtn.textContent = '⏳ Memutar...';
-            centerPin.classList.add('spinning');
-
-            const extraSpins = 5 + Math.random() * 3;
-            const targetAngle = Math.random() * 2 * Math.PI;
-            const totalRotation = extraSpins * 2 * Math.PI + targetAngle;
-            const startRotation = currentRotation;
-            const endRotation = startRotation + totalRotation;
-            const duration = 4000 + Math.random() * 1500;
-            const startTime = performance.now();
-
-            function animateSpin(time) {
-                const elapsed = time - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const eased = 1 - Math.pow(1 - progress, 3);
-                const rot = startRotation + totalRotation * eased;
-                currentRotation = rot;
-                drawWheel(rot);
-
-                if (progress < 1) {
-                    requestAnimationFrame(animateSpin);
-                } else {
-                    currentRotation = endRotation;
-                    drawWheel(endRotation);
-                    const idx = getPrizeIndex(endRotation);
-                    const prize = PRIZES[idx];
-                    isSpinning = false;
-                    spinBtn.disabled = false;
-                    spinBtn.textContent = '🎡 PUTAR RODA';
-                    centerPin.classList.remove('spinning');
-                    showResult(prize);
-                }
-            }
-            requestAnimationFrame(animateSpin);
-        }
-
-        // ================================================================
-        //  RESULT
-        // ================================================================
-        function showResult(prize) {
-            const isWin = prize.type === 'win';
-
-            resultIcon.textContent = isWin ? '🎉' : '😅';
-            resultTitle.textContent = isWin ? '🎊 SELAMAT!' : 'Yah, coba lagi!';
-            resultTitle.className = 'result-title' + (isWin ? ' gold' : '');
-            resultSub.innerHTML = isWin ?
-                `Anda mendapatkan <strong>${prize.label}</strong>! 🎁` :
-                'Kurang beruntung kali ini.<br>Jangan menyerah, spin lagi! 🔄';
-
-            if (isWin) {
-                sendWinData(currentUser, prize.label);
-                startConfetti(180);
-            } else {
-                stopConfetti();
-            }
-
-            resultModal.classList.add('show');
-        }
-
-        // ================================================================
-        //  GOOGLE SHEETS API
-        // ================================================================
-        async function validateLoginId(userId) {
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'validate', userId: userId })
-                });
-                if (!response.ok) throw new Error('Network error');
-                const data = await response.json();
-                return data.valid === true;
-            } catch (err) {
-                console.warn('Fallback validasi:', err);
-                return userId === 'VIP_ESMAMBO'; // fallback
-            }
-        }
-
-        async function sendWinData(userId, prize) {
-            try {
-                await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'recordWin',
-                        userId: userId,
-                        prize: prize,
-                        timestamp: new Date().toISOString()
-                    })
-                });
-                console.log('✅ Data kemenangan terkirim');
-            } catch (err) {
-                console.warn('⚠️ Gagal kirim data:', err);
-            }
-        }
-
-        // ================================================================
-        //  LOGIN / LOGOUT
-        // ================================================================
-        async function handleLogin() {
-            const id = loginIdInput.value.trim();
-            if (!id) {
-                loginError.textContent = '⚠️ Masukkan ID terlebih dahulu.';
-                return;
-            }
-
-            loginBtn.disabled = true;
-            loginBtn.textContent = '⏳ Memeriksa...';
-            loginError.textContent = '';
-
-            try {
-                const valid = await validateLoginId(id);
-                if (valid) {
-                    currentUser = id;
-                    currentUserSpan.textContent = currentUser;
-                    loginScreen.classList.add('hidden');
-                    gameScreen.classList.remove('hidden');
-                    drawWheel(currentRotation);
-                    loginError.textContent = '';
-                } else {
-                    loginError.textContent = '❌ ID tidak dikenali.';
-                }
-            } catch (err) {
-                loginError.textContent = '⚠️ Gagal terhubung ke server.';
-            }
-
-            loginBtn.disabled = false;
-            loginBtn.textContent = '🚀 Masuk';
-        }
-
-        function handleLogout() {
-            if (isSpinning) return;
-            stopConfetti();
-            resultModal.classList.remove('show');
-            currentUser = null;
-            currentUserSpan.textContent = '—';
-            gameScreen.classList.add('hidden');
-            loginScreen.classList.remove('hidden');
-            loginIdInput.value = '';
-            loginError.textContent = '';
-            currentRotation = 0;
-            drawWheel(0);
-        }
-
-        // ================================================================
-        //  EVENTS
-        // ================================================================
-        loginBtn.addEventListener('click', handleLogin);
-        loginIdInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') handleLogin();
-        });
-        logoutBtn.addEventListener('click', handleLogout);
-        spinBtn.addEventListener('click', spinWheel);
-        modalCloseBtn.addEventListener('click', () => {
-            resultModal.classList.remove('show');
-            stopConfetti();
-        });
-        resultModal.addEventListener('click', (e) => {
-            if (e.target === resultModal) {
-                resultModal.classList.remove('show');
-                stopConfetti();
-            }
-        });
-
-        // ================================================================
-        //  INIT
-        // ================================================================
-        drawWheel(0);
-        resizeConfetti();
-        loginIdInput.focus();
-
-        console.log('🍧 Es Mambo Spin & Win siap!');
-        console.log('📌 Ganti GOOGLE_SCRIPT_URL dengan URL Web App kamu.');
-    </script>
-
+function tampil() {
+    const tbody = document.getElementById('tabel');
+    tbody.innerHTML = '';
+    data.forEach((k,i) => {
+        tbody.innerHTML += `<tr><td>${i+1}</td><td><b>${k.plat}</b></td><td>${new Date(k.masuk).toLocaleTimeString()}</td><td>${k.wa}</td></tr>`;
+    });
+    if(data.length === 0) tbody.innerHTML = '<tr><td colspan="4">Belum ada kendaraan</td></tr>';
+}
+tampil();
+</script>
 </body>
 </html>
