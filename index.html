@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Parkir + Foto</title>
+  <title>Parkir + Foto & Riwayat</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <style>
@@ -85,6 +85,29 @@
       border-radius: 10px;
       border: 1px solid #ddd;
     }
+    .history-item {
+      border-left: 4px solid #0b3d91;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+    .history-item .badge-status {
+      font-size: 0.8rem;
+    }
+    .history-thumb {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid #ddd;
+    }
+    .history-detail-photo {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 10px;
+    }
   </style>
 </head>
 <body>
@@ -96,7 +119,7 @@
       <p class="mb-0">Tarif <strong>Rp 2.000</strong> / jam (pembulatan ke atas)</p>
     </div>
 
-    <!-- KAMERA FOTO KENDARAAN + PENGENDARA -->
+    <!-- KAMERA FOTO -->
     <div class="card card-custom">
       <div class="card-header"><i class="bi bi-camera"></i> Foto Kendaraan & Pengendara</div>
       <div class="card-body text-center">
@@ -111,16 +134,12 @@
             <i class="bi bi-power"></i> Matikan
           </button>
         </div>
-
-        <!-- Preview kamera -->
         <div class="camera-box" id="cameraContainer" style="display:none;">
           <video id="previewVideo" autoplay playsinline></video>
         </div>
-
         <button class="btn btn-warning my-2 fw-bold" onclick="capturePhoto()" id="captureBtn" style="display:none;">
           <i class="bi bi-camera-fill"></i> AMBIL FOTO
         </button>
-
         <div id="photoPreviewArea" style="display:none;" class="mt-2">
           <img id="capturedPhotoPreview" class="photo-preview" />
           <div>
@@ -133,7 +152,7 @@
       </div>
     </div>
 
-    <!-- FORM DATA KENDARAAN (tanpa scan QR) -->
+    <!-- FORM DATA -->
     <div class="card card-custom">
       <div class="card-header"><i class="bi bi-pencil"></i> Data Kendaraan</div>
       <div class="card-body">
@@ -152,6 +171,9 @@
         <div id="photoStatus" class="alert alert-info py-1 d-none">
           <i class="bi bi-check-circle"></i> Foto sudah diambil
         </div>
+        <div id="activeSessionWarning" class="alert alert-warning py-1 d-none">
+          <i class="bi bi-exclamation-triangle"></i> Ada sesi aktif. Lakukan Check-Out terlebih dahulu.
+        </div>
       </div>
     </div>
 
@@ -169,6 +191,26 @@
       </div>
     </div>
 
+    <!-- TOMBOL TAMPILKAN RIWAYAT -->
+    <div class="mt-3 text-center">
+      <button class="btn btn-outline-primary btn-sm" onclick="toggleHistory()" id="toggleHistoryBtn">
+        <i class="bi bi-clock-history"></i> Tampilkan Riwayat
+      </button>
+    </div>
+
+    <!-- RIWAYAT TRANSAKSI -->
+    <div id="historyContainer" style="display:none;" class="mt-3">
+      <div class="card card-custom">
+        <div class="card-header bg-secondary text-white">
+          <i class="bi bi-list-ul"></i> Riwayat Kendaraan
+        </div>
+        <div class="card-body" id="historyBody">
+          <!-- Akan diisi oleh JS -->
+          <p class="text-muted text-center">Belum ada transaksi.</p>
+        </div>
+      </div>
+    </div>
+
     <!-- STRUK HASIL -->
     <div class="card card-custom mt-3" id="resultCard" style="display:none;">
       <div class="card-header bg-dark text-white"><i class="bi bi-receipt"></i> Struk Digital + Foto</div>
@@ -182,10 +224,10 @@
 
   <script>
     // =====================================================
-    //  1. KAMERA FOTO (KENDARAAN + PENGENDARA)
+    //  1. KAMERA FOTO
     // =====================================================
     let photoStream = null;
-    let capturedPhotoData = null; // base64
+    let capturedPhotoData = null;
 
     const video = document.getElementById('previewVideo');
     const canvas = document.getElementById('photoCanvas');
@@ -244,46 +286,99 @@
     }
 
     // =====================================================
-    //  2. LOCAL STORAGE
+    //  2. MANAJEMEN TRANSAKSI (localStorage)
     // =====================================================
-    function getSession() {
-      const data = localStorage.getItem('parking_session');
+    const STORAGE_KEY = 'parking_transactions';
+
+    function loadTransactions() {
+      const data = localStorage.getItem(STORAGE_KEY);
       if (data) {
-        try { return JSON.parse(data); } catch (e) { return null; }
+        try { return JSON.parse(data); } catch (e) { return []; }
       }
-      return null;
+      return [];
     }
 
-    function saveSession(session) {
-      localStorage.setItem('parking_session', JSON.stringify(session));
+    function saveTransactions(transactions) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
     }
 
-    function clearSession() {
-      localStorage.removeItem('parking_session');
+    function getActiveSession() {
+      const all = loadTransactions();
+      return all.find(t => t.status === 'active') || null;
     }
 
+    function getTransactionById(id) {
+      const all = loadTransactions();
+      return all.find(t => t.id === id) || null;
+    }
+
+    // Fungsi untuk menambahkan transaksi baru (check-in)
+    function addTransaction(spot, plate, photo) {
+      const all = loadTransactions();
+      const newTx = {
+        id: 'S-' + Date.now().toString(36).toUpperCase(),
+        spot: spot,
+        plate: plate,
+        entryTime: new Date().toISOString(),
+        exitTime: null,
+        status: 'active',
+        photo: photo,
+        fee: 0,
+        durationHours: 0
+      };
+      all.push(newTx);
+      saveTransactions(all);
+      return newTx;
+    }
+
+    // Fungsi untuk update transaksi (check-out)
+    function completeTransaction(id, exitTime, fee, hours) {
+      const all = loadTransactions();
+      const idx = all.findIndex(t => t.id === id);
+      if (idx === -1) return null;
+      all[idx].exitTime = exitTime;
+      all[idx].fee = fee;
+      all[idx].durationHours = hours;
+      all[idx].status = 'completed';
+      saveTransactions(all);
+      return all[idx];
+    }
+
+    // =====================================================
+    //  3. UI RESTORE
+    // =====================================================
     function restoreUI() {
-      const sess = getSession();
-      if (sess) {
-        document.getElementById('sessionId').value = sess.id || '';
-        document.getElementById('spotCode').value = sess.spot || '';
-        document.getElementById('plateNumber').value = sess.plate || '';
-        document.getElementById('sessionInfo').classList.remove('d-none');
-        if (sess.photo) {
-          capturedPhotoData = sess.photo;
+      const active = getActiveSession();
+      const sessionInfo = document.getElementById('sessionInfo');
+      const sessionIdInput = document.getElementById('sessionId');
+      const spotInput = document.getElementById('spotCode');
+      const plateInput = document.getElementById('plateNumber');
+      const warning = document.getElementById('activeSessionWarning');
+
+      if (active) {
+        sessionIdInput.value = active.id;
+        spotInput.value = active.spot || '';
+        plateInput.value = active.plate || '';
+        sessionInfo.classList.remove('d-none');
+        warning.classList.remove('d-none');
+
+        // Restore photo
+        if (active.photo) {
+          capturedPhotoData = active.photo;
           previewImg.src = capturedPhotoData;
           previewArea.style.display = 'block';
           photoStatus.classList.remove('d-none');
         }
       } else {
-        document.getElementById('sessionInfo').classList.add('d-none');
-        document.getElementById('sessionId').value = '';
-        deletePhoto();
+        sessionInfo.classList.add('d-none');
+        sessionIdInput.value = '';
+        warning.classList.add('d-none');
+        // Jangan hapus foto jika belum disimpan
       }
     }
 
     // =====================================================
-    //  3. CHECK-IN
+    //  4. CHECK-IN
     // =====================================================
     function checkIn() {
       const spot = document.getElementById('spotCode').value.trim().toUpperCase();
@@ -292,7 +387,7 @@
       if (!spot) { alert('Masukkan kode spot parkir!'); return; }
       if (!plate) { alert('Masukkan nomor plat!'); return; }
 
-      if (getSession()) {
+      if (getActiveSession()) {
         alert('Masih ada sesi aktif. Lakukan Check-Out dulu.');
         return;
       }
@@ -302,61 +397,73 @@
         return;
       }
 
-      const session = {
-        id: 'S-' + Date.now().toString(36).toUpperCase(),
-        spot: spot,
-        plate: plate,
-        entryTime: new Date().toISOString(),
-        status: 'active',
-        photo: capturedPhotoData
-      };
-
-      saveSession(session);
+      const newTx = addTransaction(spot, plate, capturedPhotoData);
       restoreUI();
       showResult({
         success: true,
         message: `✅ Check-In berhasil untuk plat ${plate} di spot ${spot}`,
-        entry: new Date(session.entryTime).toLocaleString('id-ID'),
-        sessionId: session.id,
-        photo: session.photo
+        entry: new Date(newTx.entryTime).toLocaleString('id-ID'),
+        sessionId: newTx.id,
+        photo: newTx.photo
       });
+      // Refresh history jika terbuka
+      if (document.getElementById('historyContainer').style.display !== 'none') {
+        renderHistory();
+      }
     }
 
     // =====================================================
-    //  4. CHECK-OUT
+    //  5. CHECK-OUT
     // =====================================================
     function checkOut() {
-      const sess = getSession();
-      if (!sess) {
+      const active = getActiveSession();
+      if (!active) {
         alert('Tidak ada sesi parkir aktif. Lakukan Check-In dulu.');
         return;
       }
 
-      const entry = new Date(sess.entryTime);
+      const entry = new Date(active.entryTime);
       const now = new Date();
       const diffMinutes = (now - entry) / 60000;
       const hoursCharged = Math.ceil(diffMinutes / 60);
       const totalFee = hoursCharged * 2000;
 
+      const updated = completeTransaction(
+        active.id,
+        now.toISOString(),
+        totalFee,
+        hoursCharged
+      );
+
+      if (!updated) {
+        alert('Gagal menyelesaikan transaksi.');
+        return;
+      }
+
       showResult({
         success: true,
-        plate: sess.plate,
-        spot: sess.spot,
+        plate: updated.plate,
+        spot: updated.spot,
         entryTime: entry.toLocaleString('id-ID'),
         exitTime: now.toLocaleString('id-ID'),
         duration: Math.round(diffMinutes),
         hours: hoursCharged,
         fee: totalFee,
-        photo: sess.photo || null,
+        photo: updated.photo,
         message: '🚗 Check-Out selesai. Terima kasih!'
       });
 
-      clearSession();
+      // Hapus foto dari state (karena sudah tersimpan di riwayat)
+      deletePhoto();
       restoreUI();
+
+      if (document.getElementById('historyContainer').style.display !== 'none') {
+        renderHistory();
+      }
     }
 
     // =====================================================
-    //  5. TAMPILKAN HASIL (STRUK + FOTO)
+    //  6. TAMPILKAN HASIL (STRUK)
     // =====================================================
     function showResult(data) {
       const card = document.getElementById('resultCard');
@@ -403,11 +510,102 @@
     }
 
     // =====================================================
-    //  6. INISIALISASI
+    //  7. RIWAYAT
+    // =====================================================
+    function toggleHistory() {
+      const container = document.getElementById('historyContainer');
+      const btn = document.getElementById('toggleHistoryBtn');
+      if (container.style.display === 'none') {
+        container.style.display = 'block';
+        btn.innerHTML = '<i class="bi bi-eye-slash"></i> Sembunyikan Riwayat';
+        renderHistory();
+      } else {
+        container.style.display = 'none';
+        btn.innerHTML = '<i class="bi bi-clock-history"></i> Tampilkan Riwayat';
+      }
+    }
+
+    function renderHistory() {
+      const all = loadTransactions();
+      const body = document.getElementById('historyBody');
+
+      if (all.length === 0) {
+        body.innerHTML = '<p class="text-muted text-center">Belum ada transaksi.</p>';
+        return;
+      }
+
+      // Urutkan dari yang terbaru
+      all.sort((a, b) => new Date(b.entryTime) - new Date(a.entryTime));
+
+      let html = '';
+      all.forEach((tx, index) => {
+        const entryDate = new Date(tx.entryTime).toLocaleString('id-ID');
+        const exitDate = tx.exitTime ? new Date(tx.exitTime).toLocaleString('id-ID') : '-';
+        const statusBadge = tx.status === 'active' ?
+          '<span class="badge bg-warning text-dark">Aktif</span>' :
+          '<span class="badge bg-success">Selesai</span>';
+
+        // Buat ID unik untuk collapse
+        const collapseId = 'collapsePhoto' + index;
+
+        html += `
+          <div class="history-item">
+            <div class="d-flex flex-wrap align-items-start justify-content-between">
+              <div>
+                <strong>${tx.plate}</strong> - Spot: ${tx.spot}
+                <br>
+                <small class="text-muted">Masuk: ${entryDate}</small>
+                ${tx.exitTime ? `<br><small class="text-muted">Keluar: ${exitDate}</small>` : ''}
+                ${tx.fee > 0 ? `<br><small>Biaya: <strong>Rp ${tx.fee.toLocaleString('id-ID')}</strong></small>` : ''}
+                <br>
+                ${statusBadge}
+              </div>
+              <div class="text-end">
+                ${tx.photo ? `
+                  <img src="${tx.photo}" class="history-thumb" onclick="openFullPhoto('${tx.photo}')" 
+                       data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false" />
+                ` : `
+                  <span class="text-muted small">(tanpa foto)</span>
+                `}
+              </div>
+            </div>
+            ${tx.photo ? `
+              <div class="collapse mt-2" id="${collapseId}">
+                <div class="card card-body bg-light p-2 text-center">
+                  <img src="${tx.photo}" class="history-detail-photo" />
+                  <small class="text-muted">Foto kendaraan & pengendara</small>
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      });
+
+      body.innerHTML = html;
+    }
+
+    // Fungsi untuk menampilkan foto ukuran penuh (modal sederhana)
+    function openFullPhoto(photoData) {
+      // Gunakan alert dengan gambar? Lebih baik buka di tab baru.
+      const win = window.open('', '_blank');
+      win.document.write(`
+        <html><head><title>Foto Kendaraan</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>body{margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#000;}</style>
+        </head><body>
+        <img src="${photoData}" style="max-width:100%;max-height:100vh;object-fit:contain;" />
+        </body></html>
+      `);
+      win.document.close();
+    }
+
+    // =====================================================
+    //  8. INISIALISASI
     // =====================================================
     window.onload = function() {
       restoreUI();
 
+      // Event Enter
       document.getElementById('plateNumber').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') checkIn();
       });
