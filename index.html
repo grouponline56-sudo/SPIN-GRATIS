@@ -1,131 +1,24 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Parkir Flat 2rb</title>
-<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-<style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:Arial }
-    body { background:#f4f6f8; padding:20px }
-  .container { max-width:900px; margin:auto; background:white; padding:25px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1) }
-    h1 { text-align:center; color:#27ae60; margin-bottom:20px }
-  .box { background:#ecf0f1; padding:15px; border-radius:8px; margin-bottom:15px }
-    input, button { padding:12px; margin:5px; border:1px solid #ccc; border-radius:6px; font-size:15px }
-    button { background:#27ae60; color:white; border:none; cursor:pointer; font-weight:bold }
-    button:hover { background:#229954 }
-    button.bayar { background:#e74c3c; font-size:18px; padding:15px }
-    table { width:100%; border-collapse:collapse; margin-top:15px }
-    th, td { border:1px solid #ddd; padding:10px; text-align:center }
-    th { background:#27ae60; color:white }
-    canvas { border:2px solid #27ae60; border-radius:8px; margin-top:10px }
-  .alert { background:#d5f4e6; padding:15px; border-left:4px solid #27ae60; margin:10px 0; font-size:18px }
-  .total { font-size:32px; color:#e74c3c; font-weight:bold }
-</style>
-</head>
-<body>
-<div class="container">
-    <h1>🚗 Parkir Flat Rp2.000</h1>
-    <div class="alert"><b>Tarif:</b> Rp2.000 sekali masuk. Mau 5 menit atau 12 jam = sama</div>
+let cameraStream = null;
+const video = document.getElementById('previewCamera');
+const canvas = document.getElementById('canvasCamera');
 
-    <div class="box">
-        <h3>1. Kendaraan Masuk</h3>
-        <input type="text" id="plat" placeholder="No Plat: B 1234 CD" style="width:200px">
-        <input type="tel" id="wa" placeholder="No WA: 0812xxxx" style="width:180px">
-        <button onclick="masuk()">DAFTAR + BIKIN QR</button>
-        <div id="qrBox"></div>
-    </div>
-
-    <div class="box">
-        <h3>2. Kendaraan Keluar</h3>
-        <input type="text" id="platKeluar" placeholder="Ketik No Plat" style="width:200px">
-        <button class="bayar" onclick="keluar()">BAYAR Rp2.000 + KIRIM WA</button>
-        <div id="strukBox"></div>
-    </div>
-
-    <h3>3. Kendaraan Parkir Sekarang</h3>
-    <table>
-        <thead><tr><th>No</th><th>Plat</th><th>Jam Masuk</th><th>WA</th></tr></thead>
-        <tbody id="tabel"></tbody>
-    </table>
-</div>
-
-<script>
-let data = JSON.parse(localStorage.getItem('parkirFlat')) || [];
-const TARIF_FLAT = 2000; // Tarif tetap 2rb
-
-function simpan() {
-    localStorage.setItem('parkirFlat', JSON.stringify(data));
-    tampil();
+function startCamera(facingMode = 'environment') {
+  if (cameraStream) stopCamera();
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode, width: 640, height: 480 } })
+    .then(stream => {
+      cameraStream = stream;
+      video.srcObject = stream;
+    })
+    .catch(err => alert('Gagal akses kamera: ' + err.message));
 }
 
-function masuk() {
-    const plat = document.getElementById('plat').value.toUpperCase().trim();
-    const wa = document.getElementById('wa').value.trim();
-
-    if(!plat ||!wa) return alert('Isi plat + no WA dulu!');
-    if(data.find(k => k.plat === plat)) return alert('Plat ini masih parkir!');
-
-    const waktu = Date.now();
-    const id = 'PARKIR' + waktu;
-    data.push({plat, wa, masuk:waktu, id});
-    simpan();
-
-    // Bikin QR
-    document.getElementById('qrBox').innerHTML = `
-        <p>✅ ${plat} berhasil masuk</p>
-        <canvas id="qr"></canvas>
-        <p>Kasih QR ini ke pelanggan</p>`;
-    QRCode.toCanvas(document.getElementById('qr'), `TIKET-${id}-PLAT-${plat}`, {width:180});
-
-    document.getElementById('plat').value = '';
-    document.getElementById('wa').value = '';
+function takePhoto() {
+  const context = canvas.getContext('2d');
+  canvas.width = video.videoWidth || 640;
+  canvas.height = video.videoHeight || 480;
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+  document.getElementById('capturedPhoto').src = dataUrl;
+  document.getElementById('photoPreview').style.display = 'block';
+  return dataUrl;
 }
-
-function keluar() {
-    const plat = document.getElementById('platKeluar').value.toUpperCase().trim();
-    const idx = data.findIndex(k => k.plat === plat);
-    if(idx === -1) return alert('Plat tidak ditemukan!');
-
-    const k = data[idx];
-    const keluar = Date.now();
-
-    const struk = `
-    <div style="text-align:center">
-        <h2>=== STRUK PARKIR ===</h2>
-        <p>Plat: <b style="font-size:24px">${k.plat}</b></p>
-        <p>Masuk: ${new Date(k.masuk).toLocaleString()}</p>
-        <p>Keluar: ${new Date(keluar).toLocaleString()}</p>
-        <hr>
-        <p>Tarif Flat</p>
-        <p class="total">Rp${TARIF_FLAT.toLocaleString()}</p>
-        <button onclick="window.print()" style="padding:15px 30px; font-size:18px; background:green; color:white; border:none">🖨️ PRINT</button>
-        <button onclick="kirimWA('${k.wa}')" style="padding:15px 30px; font-size:18px; background:#25D366; color:white; border:none">💬 KIRIM WA</button>
-    </div>`;
-
-    document.getElementById('strukBox').innerHTML = struk;
-    window.open('', '', 'width=350,height=450').document.write(struk);
-
-    // Hapus data = mobil keluar
-    data.splice(idx, 1);
-    simpan();
-    document.getElementById('platKeluar').value = '';
-}
-
-function kirimWA(nomor) {
-    const pesan = `🧾 STRUK PARKIR FLAT\nPlat: ${document.getElementById('platKeluar').value.toUpperCase()}\nTarif: Rp${TARIF_FLAT.toLocaleString()}\nTerima kasih`;
-    window.open(`https://wa.me/${nomor}?text=${encodeURIComponent(pesan)}`, '_blank');
-}
-
-function tampil() {
-    const tbody = document.getElementById('tabel');
-    tbody.innerHTML = '';
-    data.forEach((k,i) => {
-        tbody.innerHTML += `<tr><td>${i+1}</td><td><b>${k.plat}</b></td><td>${new Date(k.masuk).toLocaleTimeString()}</td><td>${k.wa}</td></tr>`;
-    });
-    if(data.length === 0) tbody.innerHTML = '<tr><td colspan="4">Belum ada kendaraan</td></tr>';
-}
-tampil();
-</script>
-</body>
-</html>
