@@ -1,24 +1,484 @@
-let cameraStream = null;
-const video = document.getElementById('previewCamera');
-const canvas = document.getElementById('canvasCamera');
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Parkir Scan + Foto</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js">
+  </script>
+  <style>
+    body {
+      background: #f0f2f5;
+      font-family: 'Segoe UI', sans-serif;
+      padding-bottom: 30px;
+    }
+    .header {
+      background: linear-gradient(135deg, #0b3d91, #1a5fb4);
+      color: white;
+      padding: 18px 0;
+      border-radius: 0 0 25px 25px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      text-align: center;
+    }
+    .header h2 {
+      font-weight: 700;
+    }
+    .card-custom {
+      border-radius: 16px;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+    .card-custom .card-header {
+      background: #fff;
+      font-weight: 600;
+      border-bottom: 1px solid #e9ecef;
+      padding: 12px 18px;
+    }
+    #reader {
+      width: 100%;
+      max-width: 380px;
+      margin: 0 auto;
+      padding: 5px;
+    }
+    #reader video {
+      border-radius: 12px;
+      width: 100% !important;
+    }
+    .camera-box {
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .camera-box video {
+      width: 100%;
+      display: block;
+      max-height: 350px;
+      object-fit: cover;
+    }
+    .photo-preview {
+      max-width: 400px;
+      margin: 10px auto;
+      border-radius: 12px;
+      border: 3px solid #0b3d91;
+      display: none;
+    }
+    .btn-primary {
+      background: #0b3d91;
+      border: none;
+    }
+    .btn-primary:active {
+      transform: scale(0.96);
+    }
+    .btn-success {
+      background: #1e7e34;
+      border: none;
+    }
+    .btn-danger {
+      background: #b22222;
+      border: none;
+    }
+    .btn-outline-secondary:active {
+      transform: scale(0.95);
+    }
+    .fee-box {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #0b3d91;
+    }
+    .photo-in-struk {
+      max-width: 100%;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
 
-function startCamera(facingMode = 'environment') {
-  if (cameraStream) stopCamera();
-  navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode, width: 640, height: 480 } })
-    .then(stream => {
-      cameraStream = stream;
-      video.srcObject = stream;
-    })
-    .catch(err => alert('Gagal akses kamera: ' + err.message));
-}
+  <div class="container">
+    <!-- HEADER -->
+    <div class="header">
+      <h2><i class="bi bi-camera-reels"></i> Parkir Scan + Foto</h2>
+      <p class="mb-0">Tarif <strong>Rp 2.000</strong> / jam (pembulatan ke atas)</p>
+    </div>
 
-function takePhoto() {
-  const context = canvas.getContext('2d');
-  canvas.width = video.videoWidth || 640;
-  canvas.height = video.videoHeight || 480;
-  context.drawImage(video, 0, 0, canvas.width, canvas.height);
-  const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-  document.getElementById('capturedPhoto').src = dataUrl;
-  document.getElementById('photoPreview').style.display = 'block';
-  return dataUrl;
-}
+    <!-- SCAN QR -->
+    <div class="card card-custom">
+      <div class="card-header"><i class="bi bi-qr-code-scan"></i> Scan QR Spot</div>
+      <div class="card-body text-center">
+        <div id="reader"></div>
+        <button class="btn btn-outline-secondary btn-sm mt-2" onclick="restartScanner()">
+          <i class="bi bi-arrow-repeat"></i> Ulangi Kamera QR
+        </button>
+      </div>
+    </div>
+
+    <!-- KAMERA FOTO KENDARAAN + PENGENDARA -->
+    <div class="card card-custom">
+      <div class="card-header"><i class="bi bi-camera"></i> Foto Kendaraan & Pengendara</div>
+      <div class="card-body text-center">
+        <!-- Tombol kontrol kamera -->
+        <div class="mb-2">
+          <button class="btn btn-primary btn-sm me-1" onclick="startPhotoCamera('environment')">
+            <i class="bi bi-camera-rear"></i> Kamera Belakang
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="startPhotoCamera('user')">
+            <i class="bi bi-camera-front"></i> Kamera Depan
+          </button>
+          <button class="btn btn-outline-danger btn-sm ms-1" onclick="stopPhotoCamera()">
+            <i class="bi bi-power"></i> Matikan
+          </button>
+        </div>
+
+        <!-- Preview kamera -->
+        <div class="camera-box" id="cameraContainer" style="display:none;">
+          <video id="previewVideo" autoplay playsinline></video>
+        </div>
+
+        <!-- Tombol ambil foto -->
+        <button class="btn btn-warning my-2 fw-bold" onclick="capturePhoto()" id="captureBtn" style="display:none;">
+          <i class="bi bi-camera-fill"></i> AMBIL FOTO
+        </button>
+
+        <!-- Hasil foto preview -->
+        <div id="photoPreviewArea" style="display:none;" class="mt-2">
+          <img id="capturedPhotoPreview" class="photo-preview" />
+          <div>
+            <button class="btn btn-sm btn-danger" onclick="deletePhoto()">
+              <i class="bi bi-trash"></i> Hapus Foto
+            </button>
+          </div>
+        </div>
+        <canvas id="photoCanvas" style="display:none;"></canvas>
+      </div>
+    </div>
+
+    <!-- FORM DATA -->
+    <div class="card card-custom">
+      <div class="card-header"><i class="bi bi-pencil"></i> Data Kendaraan</div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label class="fw-semibold">Kode Spot</label>
+          <input type="text" class="form-control" id="spotCode" placeholder="Dari scan QR atau ketik manual" readonly>
+        </div>
+        <div class="mb-3">
+          <label class="fw-semibold">Nomor Plat</label>
+          <input type="text" class="form-control text-uppercase" id="plateNumber" placeholder="Contoh: B 1234 XYZ">
+        </div>
+        <div id="sessionInfo" class="mb-2 d-none">
+          <label class="fw-semibold">ID Sesi</label>
+          <input type="text" class="form-control" id="sessionId" readonly>
+        </div>
+        <div id="photoStatus" class="alert alert-info py-1 d-none">
+          <i class="bi bi-check-circle"></i> Foto sudah diambil
+        </div>
+      </div>
+    </div>
+
+    <!-- TOMBOL AKSI -->
+    <div class="row g-2">
+      <div class="col-6">
+        <button class="btn btn-success w-100 py-2" onclick="checkIn()">
+          <i class="bi bi-box-arrow-in-right"></i> Masuk
+        </button>
+      </div>
+      <div class="col-6">
+        <button class="btn btn-danger w-100 py-2" onclick="checkOut()">
+          <i class="bi bi-box-arrow-right"></i> Keluar
+        </button>
+      </div>
+    </div>
+
+    <!-- STRUK HASIL -->
+    <div class="card card-custom mt-3" id="resultCard" style="display:none;">
+      <div class="card-header bg-dark text-white"><i class="bi bi-receipt"></i> Struk Digital + Foto</div>
+      <div class="card-body" id="resultBody"></div>
+    </div>
+
+    <div class="text-center text-muted small mt-3">
+      <i class="bi bi-info-circle"></i> Data & foto tersimpan di HP Anda (localStorage).
+    </div>
+  </div>
+
+  <script>
+    // =====================================================
+    //  1. QR SCANNER
+    // =====================================================
+    let html5QrCode;
+    let isScanning = false;
+
+    function onScanSuccess(decodedText) {
+      let spot = decodedText;
+      if (decodedText.includes(':')) spot = decodedText.split(':')[1];
+      document.getElementById('spotCode').value = spot.trim().toUpperCase();
+      if (html5QrCode) {
+        html5QrCode.stop().then(() => { isScanning = false; });
+      }
+    }
+
+    function startScanner() {
+      if (isScanning) return;
+      const readerDiv = document.getElementById('reader');
+      readerDiv.innerHTML = '';
+      html5QrCode = new Html5Qrcode("reader");
+      const config = { fps: 10, qrbox: { width: 240, height: 240 }, aspectRatio: 1.0 };
+      html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, () => {})
+        .then(() => { isScanning = true; })
+        .catch(() => alert('Gagal akses kamera QR. Pastikan izin diberikan.'));
+    }
+
+    function restartScanner() {
+      if (html5QrCode) {
+        html5QrCode.stop().then(() => { isScanning = false;
+          startScanner(); });
+      } else { startScanner(); }
+    }
+
+    // =====================================================
+    //  2. KAMERA FOTO (KENDARAAN + PENGENDARA)
+    // =====================================================
+    let photoStream = null;
+    let capturedPhotoData = null; // base64
+
+    const video = document.getElementById('previewVideo');
+    const canvas = document.getElementById('photoCanvas');
+    const previewImg = document.getElementById('capturedPhotoPreview');
+    const previewArea = document.getElementById('photoPreviewArea');
+    const cameraContainer = document.getElementById('cameraContainer');
+    const captureBtn = document.getElementById('captureBtn');
+    const photoStatus = document.getElementById('photoStatus');
+
+    function startPhotoCamera(facingMode) {
+      stopPhotoCamera();
+      navigator.mediaDevices.getUserMedia({
+          video: { facingMode: facingMode, width: { ideal: 640 }, height: { ideal: 480 } },
+          audio: false
+        })
+        .then(stream => {
+          photoStream = stream;
+          video.srcObject = stream;
+          cameraContainer.style.display = 'block';
+          captureBtn.style.display = 'inline-block';
+        })
+        .catch(err => alert('Gagal buka kamera: ' + err.message));
+    }
+
+    function stopPhotoCamera() {
+      if (photoStream) {
+        photoStream.getTracks().forEach(track => track.stop());
+        photoStream = null;
+      }
+      video.srcObject = null;
+      cameraContainer.style.display = 'none';
+      captureBtn.style.display = 'none';
+    }
+
+    function capturePhoto() {
+      if (!photoStream) {
+        alert('Nyalakan kamera dulu dengan klik "Kamera Belakang/Depan"!');
+        return;
+      }
+      const ctx = canvas.getContext('2d');
+      canvas.width = video.videoWidth || 640;
+      canvas.height = video.videoHeight || 480;
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      // Kompres ke JPEG kualitas 70% agar hemat memory
+      capturedPhotoData = canvas.toDataURL('image/jpeg', 0.7);
+      previewImg.src = capturedPhotoData;
+      previewArea.style.display = 'block';
+      photoStatus.classList.remove('d-none');
+      // Matikan kamera setelah ambil foto agar hemat baterai
+      stopPhotoCamera();
+    }
+
+    function deletePhoto() {
+      capturedPhotoData = null;
+      previewImg.src = '';
+      previewArea.style.display = 'none';
+      photoStatus.classList.add('d-none');
+    }
+
+    // =====================================================
+    //  3. LOCAL STORAGE
+    // =====================================================
+    function getSession() {
+      const data = localStorage.getItem('parking_session');
+      if (data) {
+        try { return JSON.parse(data); } catch (e) { return null; }
+      }
+      return null;
+    }
+
+    function saveSession(session) {
+      localStorage.setItem('parking_session', JSON.stringify(session));
+    }
+
+    function clearSession() {
+      localStorage.removeItem('parking_session');
+    }
+
+    function restoreUI() {
+      const sess = getSession();
+      if (sess) {
+        document.getElementById('sessionId').value = sess.id || '';
+        document.getElementById('spotCode').value = sess.spot || '';
+        document.getElementById('plateNumber').value = sess.plate || '';
+        document.getElementById('sessionInfo').classList.remove('d-none');
+        if (sess.photo) {
+          capturedPhotoData = sess.photo;
+          previewImg.src = capturedPhotoData;
+          previewArea.style.display = 'block';
+          photoStatus.classList.remove('d-none');
+        }
+      } else {
+        document.getElementById('sessionInfo').classList.add('d-none');
+        document.getElementById('sessionId').value = '';
+        deletePhoto();
+      }
+    }
+
+    // =====================================================
+    //  4. CHECK-IN
+    // =====================================================
+    function checkIn() {
+      const spot = document.getElementById('spotCode').value.trim();
+      const plate = document.getElementById('plateNumber').value.trim().toUpperCase();
+
+      if (!spot) { alert('Scan QR atau ketik kode spot!'); return; }
+      if (!plate) { alert('Masukkan nomor plat!'); return; }
+
+      if (getSession()) {
+        alert('Masih ada sesi aktif. Lakukan Check-Out dulu.');
+        return;
+      }
+
+      if (!capturedPhotoData) {
+        alert('Ambil foto kendaraan & pengendara dulu!');
+        return;
+      }
+
+      const session = {
+        id: 'S-' + Date.now().toString(36).toUpperCase(),
+        spot: spot,
+        plate: plate,
+        entryTime: new Date().toISOString(),
+        status: 'active',
+        photo: capturedPhotoData // simpan base64 foto
+      };
+
+      saveSession(session);
+      restoreUI();
+      showResult({
+        success: true,
+        message: `✅ Check-In berhasil untuk plat ${plate} di spot ${spot}`,
+        entry: new Date(session.entryTime).toLocaleString('id-ID'),
+        sessionId: session.id,
+        photo: session.photo
+      }, 'in');
+    }
+
+    // =====================================================
+    //  5. CHECK-OUT
+    // =====================================================
+    function checkOut() {
+      const sess = getSession();
+      if (!sess) {
+        alert('Tidak ada sesi parkir aktif. Lakukan Check-In dulu.');
+        return;
+      }
+
+      const entry = new Date(sess.entryTime);
+      const now = new Date();
+      const diffMinutes = (now - entry) / 60000;
+      const hoursCharged = Math.ceil(diffMinutes / 60);
+      const totalFee = hoursCharged * 2000;
+
+      showResult({
+        success: true,
+        plate: sess.plate,
+        spot: sess.spot,
+        entryTime: entry.toLocaleString('id-ID'),
+        exitTime: now.toLocaleString('id-ID'),
+        duration: Math.round(diffMinutes),
+        hours: hoursCharged,
+        fee: totalFee,
+        photo: sess.photo || null,
+        message: '🚗 Check-Out selesai. Terima kasih!'
+      }, 'out');
+
+      clearSession();
+      restoreUI();
+    }
+
+    // =====================================================
+    //  6. TAMPILKAN HASIL (STRUK + FOTO)
+    // =====================================================
+    function showResult(data, type) {
+      const card = document.getElementById('resultCard');
+      const body = document.getElementById('resultBody');
+      card.style.display = 'block';
+
+      let html = '';
+      if (data.success) {
+        html = `<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i> ${data.message || ''}</div>`;
+
+        if (data.photo) {
+          html += `<div class="text-center mb-2">
+                      <img src="${data.photo}" class="photo-in-struk" style="max-height:250px;" />
+                      <br><small class="text-muted"><i class="bi bi-image"></i> Foto kendaraan & pengendara</small>
+                    </div>`;
+        }
+
+        html += `<table class="table table-sm table-borderless">
+                  <tr><td><i class="bi bi-pin-map"></i> Spot</td><td>: <strong>${data.spot || '-'}</strong></td></tr>
+                  <tr><td><i class="bi bi-car-front"></i> Plat</td><td>: <strong>${data.plate || '-'}</strong></td></tr>
+                  <tr><td><i class="bi bi-clock"></i> Masuk</td><td>: ${data.entryTime || '-'}</td></tr>`;
+        if (data.exitTime) {
+          html += `<tr><td><i class="bi bi-clock"></i> Keluar</td><td>: ${data.exitTime}</td></tr>`;
+        }
+        if (data.duration !== undefined) {
+          html += `<tr><td><i class="bi bi-hourglass-split"></i> Durasi</td><td>: ${data.duration} menit (dibulatkan ${data.hours || 0} jam)</td></tr>`;
+        }
+        if (data.fee !== undefined) {
+          html += `</table>
+                    <div class="p-3 bg-light text-center rounded">
+                      <span class="text-muted">💳 Total Tarif</span>
+                      <div class="fee-box">Rp ${data.fee.toLocaleString('id-ID')}</div>
+                    </div>`;
+        }
+        if (data.sessionId) {
+          html += `<hr><small><i class="bi bi-key"></i> ID Sesi: ${data.sessionId}</small>`;
+        }
+      } else {
+        html = `<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i> ${data.message || 'Error'}</div>`;
+      }
+
+      body.innerHTML = html;
+      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // =====================================================
+    //  7. INIT
+    // =====================================================
+    window.onload = function() {
+      startScanner();
+      restoreUI();
+
+      document.getElementById('plateNumber').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') checkIn();
+      });
+
+      // Jika pengguna keluar halaman, matikan kamera
+      window.addEventListener('beforeunload', function() {
+        stopPhotoCamera();
+      });
+    };
+  </script>
+</body>
+</html>
