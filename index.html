@@ -4,10 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Promo Jualan · ShopWA</title>
-    <!-- Font Awesome 6 (gratis) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-        /* ----- RESET & VARIABEL ----- */
         * {
             margin: 0;
             padding: 0;
@@ -240,12 +238,6 @@
             letter-spacing: 0.5px;
         }
 
-        .hero-image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
         .hero-image img {
             max-width: 100%;
             height: auto;
@@ -298,9 +290,77 @@
             margin: 0 auto;
         }
 
-        /* ----- PRODUK / PRODUCTS ----- */
+        /* ----- METODE PENGIRIMAN (TOGGLE) ----- */
+        .delivery-method {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 30px;
+            justify-content: center;
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+
+        .delivery-method .label {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 1.05rem;
+        }
+
+        .delivery-method .options {
+            display: flex;
+            gap: 20px;
+        }
+
+        .delivery-method .options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 8px 18px;
+            border-radius: 50px;
+            border: 2px solid #e2e8f0;
+            transition: var(--transition);
+        }
+
+        .delivery-method .options label:hover {
+            border-color: var(--primary);
+        }
+
+        .delivery-method .options input[type="radio"] {
+            accent-color: var(--primary);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .delivery-method .options label.active {
+            border-color: var(--primary);
+            background: #e8f5e9;
+        }
+
+        .delivery-method .prepay-badge {
+            background: #fef3c7;
+            padding: 6px 16px;
+            border-radius: 50px;
+            color: #b45309;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .delivery-method .prepay-badge.show {
+            display: inline-block;
+        }
+
+        /* ----- PRODUK ----- */
         .products {
-            padding: 60px 0 40px;
+            padding: 20px 0 40px;
         }
 
         .product-grid {
@@ -316,6 +376,7 @@
             box-shadow: var(--shadow);
             transition: var(--transition);
             border: 1px solid rgba(0, 0, 0, 0.04);
+            position: relative;
         }
 
         .product-card:hover {
@@ -363,6 +424,17 @@
             background: #3b82f6;
         }
 
+        .product-card .badge.prepay {
+            background: #8b5cf6;
+            top: 60px;
+            font-size: 0.7rem;
+            display: none;
+        }
+
+        .product-card .badge.prepay.show {
+            display: block;
+        }
+
         .product-card .body {
             padding: 20px 22px 24px;
         }
@@ -387,7 +459,7 @@
             font-size: 1.4rem;
             font-weight: 800;
             color: var(--secondary);
-            margin-bottom: 16px;
+            margin-bottom: 6px;
         }
 
         .product-card .body .price small {
@@ -396,6 +468,20 @@
             color: var(--text-light);
             text-decoration: line-through;
             margin-left: 10px;
+        }
+
+        .product-card .body .delivery-note {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            background: #f1f5f9;
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: none;
+            margin-bottom: 14px;
+        }
+
+        .product-card .body .delivery-note.show {
+            display: inline-block;
         }
 
         .product-card .body .btn-wa {
@@ -541,7 +627,7 @@
             color: var(--text-light);
         }
 
-        /* ----- LOKASI (MAPS) ----- */
+        /* ----- LOKASI ----- */
         .location {
             padding: 60px 0 40px;
         }
@@ -708,41 +794,33 @@
                 grid-template-columns: 1fr;
                 text-align: center;
             }
-
             .hero-content p {
                 margin-left: auto;
                 margin-right: auto;
             }
-
             .hero-stats {
                 justify-content: center;
             }
-
             .hero-image img {
                 max-height: 280px;
             }
-
             .promo-banner {
                 grid-template-columns: 1fr;
                 text-align: center;
                 padding: 36px 24px;
             }
-
             .promo-banner .left .timer {
                 justify-content: center;
             }
-
             .promo-banner .right .discount {
                 font-size: 2.8rem;
             }
-
             .location-wrapper {
                 grid-template-columns: 1fr;
             }
             .map-container iframe {
                 height: 300px;
             }
-
             .footer .container {
                 grid-template-columns: 1fr 1fr;
                 gap: 30px;
@@ -758,51 +836,50 @@
                 gap: 16px;
                 background: #fff;
             }
-
             .nav-links.open {
                 display: flex;
             }
-
             .hamburger {
                 display: block;
             }
-
             .hero {
                 padding: 40px 0 50px;
             }
-
             .hero-content h1 {
                 font-size: 2rem;
             }
-
             .hero-stats {
                 gap: 20px;
                 flex-wrap: wrap;
             }
-
             .product-grid {
                 grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
                 gap: 20px;
             }
-
             .promo-banner .left h3 {
                 font-size: 1.4rem;
             }
-
             .promo-banner .left .timer .unit {
                 min-width: 52px;
                 padding: 6px 12px;
             }
-
             .promo-banner .left .timer .unit .num {
                 font-size: 1.5rem;
             }
-
+            .delivery-method {
+                flex-direction: column;
+                gap: 16px;
+                align-items: stretch;
+                padding: 20px;
+            }
+            .delivery-method .options {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
             .footer .container {
                 grid-template-columns: 1fr;
                 gap: 24px;
             }
-
             .floating-wa {
                 width: 56px;
                 height: 56px;
@@ -817,36 +894,33 @@
                 grid-template-columns: 1fr 1fr;
                 gap: 14px;
             }
-
             .product-card .body {
                 padding: 14px 16px 18px;
             }
-
             .product-card .body .name {
                 font-size: 0.95rem;
             }
-
             .product-card .body .price {
                 font-size: 1.1rem;
             }
-
             .product-card .body .btn-wa {
                 font-size: 0.8rem;
                 padding: 10px;
             }
-
             .hero-content h1 {
                 font-size: 1.6rem;
             }
-
             .section-title h2 {
                 font-size: 1.6rem;
+            }
+            .delivery-method .options label {
+                font-size: 0.85rem;
+                padding: 6px 12px;
             }
         }
     </style>
 </head>
 <body>
-
     <!-- ===== NAVBAR ===== -->
     <header class="navbar">
         <div class="container">
@@ -864,7 +938,7 @@
                 <li><a href="#location">Lokasi</a></li>
                 <li><a href="#contact">Kontak</a></li>
                 <li>
-                    <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20tertarik%20dengan%20promo%20Anda" target="_blank" class="btn-wa-small">
+                    <a href="https://wa.me/628111752404?text=Halo%2C%20saya%20tertarik%20dengan%20promo%20Anda" target="_blank" class="btn-wa-small">
                         <i class="fab fa-whatsapp"></i> Chat
                     </a>
                 </li>
@@ -879,17 +953,17 @@
                 <div class="hero-badge">
                     <i class="fas fa-bolt"></i> PROMO SPESIAL HARI INI
                 </div>
-                <h1>Dapatkan Diskon <span>50%</span> <br />Untuk Pembelian Pertama</h1>
+                <h1>Dapatkan Diskon Antar<span>50%</span> <br />Untuk Pembelian Pertama</h1>
                 <p>
-                    Belanja produk berkualitas dengan harga terjangkau.
+                    Belanja makanan dan minuman dengan harga terjangkau.
                     Klik tombol di bawah untuk order langsung via WhatsApp Business!
                 </p>
-                <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20ingin%20order%20promo%20pertama" target="_blank" class="btn-wa">
+                <a href="https://wa.me/628111752404?text=Halo%2C%20saya%20ingin%20order%20promo%20pertama" target="_blank" class="btn-wa">
                     <i class="fab fa-whatsapp"></i> Order Sekarang
                 </a>
                 <div class="hero-stats">
                     <div class="stat">
-                        <div class="number">500+</div>
+                        <div class="number">1500+</div>
                         <div class="label">Pelanggan Puas</div>
                     </div>
                     <div class="stat">
@@ -908,16 +982,35 @@
         </div>
     </section>
 
+    <!-- ===== METODE PENGIRIMAN ===== -->
+    <section class="container" id="delivery-method">
+        <div class="delivery-method" id="deliveryMethod">
+            <span class="label"><i class="fas fa-shipping-fast"></i> Metode Pengiriman:</span>
+            <div class="options">
+                <label class="active" id="labelPickup">
+                    <input type="radio" name="delivery" value="pickup" checked /> 
+                    <i class="fas fa-store"></i> Ambil di Tempat
+                </label>
+                <label id="labelDelivery">
+                    <input type="radio" name="delivery" value="delivery" /> 
+                    <i class="fas fa-truck"></i> Delivery[Antar]
+                </label>
+            </div>
+            <span class="prepay-badge" id="prepayBadge">
+                <i class="fas fa-credit-card"></i> Wajib Bayar dahulu
+            </span>
+        </div>
+    </section>
+
     <!-- ===== PRODUK ===== -->
     <section class="products" id="products">
         <div class="container">
             <div class="section-title">
                 <h2>Produk <span>Unggulan</span></h2>
-                <p>Pilih produk favoritmu, lalu klik order untuk langsung terhubung dengan kami di WhatsApp Business.</p>
+                <p>Pilih makanan dan minuman favoritmu, lalu klik order untuk langsung terhubung dengan kami di WhatsApp.</p>
             </div>
-
             <div class="product-grid" id="productGrid">
-                <!-- card akan di-generate oleh JS -->
+                <!-- di-generate JS -->
             </div>
         </div>
     </section>
@@ -951,7 +1044,7 @@
                 <div class="discount">50 <small>%</small></div>
                 <div class="sub">OFF <br /> semua produk</div>
                 <br />
-                <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20mau%20klaim%20diskon%2050%25%20dengan%20kode%20FLASH50" target="_blank" class="btn-accent">
+                <a href="https://wa.me/628111752404?text=Halo%2C%20saya%20mau%20klaim%20diskon%2050%25%20dengan%20kode%20FLASH50" target="_blank" class="btn-accent">
                     <i class="fab fa-whatsapp"></i> Klaim Sekarang
                 </a>
             </div>
@@ -971,21 +1064,15 @@
         </div>
     </section>
 
-    <!-- ===== LOKASI KAMI (MAPS) ===== -->
+    <!-- ===== LOKASI ===== -->
     <section class="location" id="location">
         <div class="container">
             <div class="section-title">
                 <h2>Lokasi <span>Kami</span></h2>
-                <p>Kunjungi toko kami atau temukan kami di peta berikut.</p>
+                <p>Kunjungi MIE AYAM HeHe kami atau temukan kami di peta berikut.</p>
             </div>
             <div class="location-wrapper">
                 <div class="map-container">
-                    <!-- 
-                        ⚠️ PERBAIKAN MAPS:
-                        Gunakan URL di bawah ini yang sudah saya sesuaikan agar lebih stabil.
-                        Jika ingin menggunakan embed resmi dari Google Maps, ganti src dengan URL embed yang Anda dapatkan dari 
-                        tombol "Bagikan" → "Sematan peta" di Google Maps.
-                    -->
                     <iframe 
                         src="https://maps.google.com/maps?q=MIE%20AYAM%20HeHe&output=embed"
                         width="100%" 
@@ -999,8 +1086,8 @@
                     <h3><i class="fas fa-map-pin"></i> Alamat Kami</h3>
                     <p><i class="fas fa-store"></i> MIE AYAM HeHe</p>
                     <p><i class="fas fa-clock"></i> Jam Buka: 09.00 - 23.00 (Setiap Hari)</p>
-                    <p><i class="fas fa-phone"></i> Telp: +62 812-3456-7890</p>
-                    <a href="https://wa.me/6281234567890" target="_blank" class="btn-wa">
+                    <p><i class="fas fa-phone"></i> Telp: +62 811-1752-404</p>
+                    <a href="https://wa.me/628111752404" target="_blank" class="btn-wa">
                         <i class="fab fa-whatsapp"></i> Hubungi via WA
                     </a>
                 </div>
@@ -1013,12 +1100,12 @@
         <div class="container">
             <div class="brand">
                 <h3><i class="fab fa-whatsapp"></i> ShopWA</h3>
-                <p>Solusi belanja mudah dan cepat. Order langsung via WhatsApp Business dan dapatkan promo menarik setiap hari.</p>
+                <p>Solusi penghilang lapar mudah dan cepat. Order langsung via WhatsApp Business dan dapatkan promo menarik setiap hari.</p>
                 <div class="social">
                     <a href="#"><i class="fab fa-instagram"></i></a>
                     <a href="#"><i class="fab fa-facebook-f"></i></a>
                     <a href="#"><i class="fab fa-youtube"></i></a>
-                    <a href="https://wa.me/6281234567890" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://wa.me/628111752404" target="_blank"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
             <div>
@@ -1043,10 +1130,10 @@
             <div>
                 <h4>Kontak</h4>
                 <ul>
-                    <li><i class="fab fa-whatsapp" style="color:var(--primary);"></i> +62 812-3456-7890</li>
+                    <li><i class="fab fa-whatsapp" style="color:var(--primary);"></i> +62 811-1752-404</li>
                     <li><i class="far fa-envelope"></i> shopwa@example.com</li>
-                    <li><i class="fas fa-map-marker-alt"></i> Jakarta, Indonesia</li>
-                    <li><a href="https://wa.me/6281234567890" target="_blank" class="btn-wa-small" style="display:inline-flex;margin-top:6px;gap:6px;background:var(--primary);color:#fff;padding:6px 16px;border-radius:50px;font-size:0.8rem;">
+                    <li><i class="fas fa-map-marker-alt"></i> Pingit Tugu, Indonesia</li>
+                    <li><a href="https://wa.me/628111752404" target="_blank" class="btn-wa-small" style="display:inline-flex;margin-top:6px;gap:6px;background:var(--primary);color:#fff;padding:6px 16px;border-radius:50px;font-size:0.8rem;">
                             <i class="fab fa-whatsapp"></i> Chat Kami
                         </a></li>
                 </ul>
@@ -1058,7 +1145,7 @@
     </footer>
 
     <!-- ===== FLOATING WA ===== -->
-    <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda" target="_blank" class="floating-wa" aria-label="Chat via WhatsApp">
+    <a href="https://wa.me/628111752404?text=Halo%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda" target="_blank" class="floating-wa" aria-label="Chat via WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
 
@@ -1123,6 +1210,7 @@
 
         // ---- RENDER PRODUK ----
         const grid = document.getElementById('productGrid');
+        let productCards = [];
 
         products.forEach(p => {
             const card = document.createElement('div');
@@ -1132,11 +1220,15 @@
                 `<span class="badge ${p.badge}">${p.badgeText}</span>` :
                 '';
 
+            const prepayBadge = `<span class="badge prepay" id="prepayBadge-${p.id}"><i class="fas fa-credit-card"></i> Bayar dahulu</span>`;
+
             const oldPriceHTML = p.oldPrice ?
                 `<small>Rp ${p.oldPrice.toLocaleString('id-ID')}</small>` :
                 '';
 
-            const waMsg = encodeURIComponent(
+            const deliveryNote = `<div class="delivery-note" id="note-${p.id}"><i class="fas fa-credit-card"></i> Wajib bayar dahulu untuk delivery</div>`;
+
+            const waMsgDefault = encodeURIComponent(
                 `Halo, saya ingin memesan *${p.name}* (Rp ${p.price.toLocaleString('id-ID')})`
             );
 
@@ -1144,6 +1236,7 @@
                         <div class="image">
                             <img src="${p.image}" alt="${p.name}" loading="lazy" />
                             ${badgeHTML}
+                            ${prepayBadge}
                         </div>
                         <div class="body">
                             <div class="name">${p.name}</div>
@@ -1152,13 +1245,68 @@
                                 Rp ${p.price.toLocaleString('id-ID')}
                                 ${oldPriceHTML}
                             </div>
-                            <a href="https://wa.me/6281234567890?text=${waMsg}" target="_blank" class="btn-wa">
+                            ${deliveryNote}
+                            <a href="https://wa.me/628111752404?text=${waMsgDefault}" target="_blank" class="btn-wa" id="waBtn-${p.id}">
                                 <i class="fab fa-whatsapp"></i> Order via WA
                             </a>
                         </div>
                     `;
             grid.appendChild(card);
+            productCards.push({
+                id: p.id,
+                name: p.name,
+                price: p.price,
+                element: card,
+                badge: document.getElementById(`prepayBadge-${p.id}`),
+                note: document.getElementById(`note-${p.id}`),
+                waBtn: document.getElementById(`waBtn-${p.id}`)
+            });
         });
+
+        // ---- TOGGLE DELIVERY METHOD ----
+        const radioPickup = document.querySelector('input[name="delivery"][value="pickup"]');
+        const radioDelivery = document.querySelector('input[name="delivery"][value="delivery"]');
+        const prepayBadgeGlobal = document.getElementById('prepayBadge');
+        const labelPickup = document.getElementById('labelPickup');
+        const labelDelivery = document.getElementById('labelDelivery');
+
+        function updateDeliveryMethod() {
+            const isDelivery = radioDelivery.checked;
+
+            if (isDelivery) {
+                prepayBadgeGlobal.classList.add('show');
+                labelDelivery.classList.add('active');
+                labelPickup.classList.remove('active');
+            } else {
+                prepayBadgeGlobal.classList.remove('show');
+                labelPickup.classList.add('active');
+                labelDelivery.classList.remove('active');
+            }
+
+            productCards.forEach(p => {
+                if (isDelivery) {
+                    p.badge.classList.add('show');
+                    p.note.classList.add('show');
+                    const waMsg = encodeURIComponent(
+                        `Halo, saya ingin memesan *${p.name}* (Rp ${p.price.toLocaleString('id-ID')}) – Saya siap bayar dahulu. Mohon info total + ongkir.`
+                    );
+                    p.waBtn.href = `https://wa.me/628111752404?text=${waMsg}`;
+                } else {
+                    p.badge.classList.remove('show');
+                    p.note.classList.remove('show');
+                    const waMsg = encodeURIComponent(
+                        `Halo, saya ingin memesan *${p.name}* (Rp ${p.price.toLocaleString('id-ID')}) – Saya akan ambil di tempat.`
+                    );
+                    p.waBtn.href = `https://wa.me/628111752404?text=${waMsg}`;
+                }
+            });
+        }
+
+        radioPickup.addEventListener('change', updateDeliveryMethod);
+        radioDelivery.addEventListener('change', updateDeliveryMethod);
+
+        // Set initial state (pickup = default)
+        updateDeliveryMethod();
 
         // ---- TESTIMONI ----
         const testimonials = [{
@@ -1207,7 +1355,7 @@
             testiGrid.appendChild(card);
         });
 
-        // ---- COUNTDOWN TIMER (1 hari dari sekarang) ----
+        // ---- COUNTDOWN ----
         const target = new Date();
         target.setDate(target.getDate() + 1);
         target.setHours(23, 59, 59, 0);
@@ -1235,7 +1383,7 @@
         updateCountdown();
         setInterval(updateCountdown, 1000);
 
-        // ---- HAMBURGER MENU ----
+        // ---- HAMBURGER ----
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
 
@@ -1243,14 +1391,13 @@
             navLinks.classList.toggle('open');
         });
 
-        // Tutup menu saat link diklik (mobile)
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('open');
             });
         });
 
-        // ---- SMOOTH SCROLL untuk anchor ----
+        // ---- SMOOTH SCROLL ----
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 const href = this.getAttribute('href');
@@ -1263,9 +1410,7 @@
             });
         });
 
-        console.log('🚀 ShopWA — Sistem Promosi Jualan siap!');
-        console.log('💬 Terhubung ke WhatsApp Business via wa.me');
+        console.log('🚀 ShopWA siap! Nomor WA sudah diperbarui ke 628111752404.');
     </script>
-
 </body>
 </html>
