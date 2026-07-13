@@ -1,214 +1,1287 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Parkir Multi – Cloud</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <style>
-    body { background: #f0f2f5; font-family: 'Segoe UI', sans-serif; padding-bottom: 30px; }
-    .header { background: linear-gradient(135deg, #0b3d91, #1a5fb4); color: white; padding: 18px 0; border-radius: 0 0 25px 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align: center; }
-    .header h2 { font-weight: 700; }
-    .card-custom { border-radius: 16px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.06); overflow: hidden; margin-bottom: 18px; }
-    .card-custom .card-header { background: #fff; font-weight: 600; border-bottom: 1px solid #e9ecef; padding: 12px 18px; }
-    .camera-box { background: #000; border-radius: 12px; overflow: hidden; position: relative; max-width: 400px; margin: 0 auto; }
-    .camera-box video { width: 100%; display: block; max-height: 350px; object-fit: cover; }
-    .photo-preview { max-width: 400px; margin: 10px auto; border-radius: 12px; border: 3px solid #0b3d91; display: none; }
-    .btn-primary { background: #0b3d91; border: none; }
-    .btn-primary:active { transform: scale(0.96); }
-    .btn-success { background: #1e7e34; border: none; }
-    .btn-danger { background: #b22222; border: none; }
-    .btn-warning { color: #000; }
-    .fee-box { font-size: 2rem; font-weight: 800; color: #0b3d91; }
-    .photo-in-struk { max-width: 100%; border-radius: 10px; border: 1px solid #ddd; }
-    .history-item { border-left: 4px solid #0b3d91; padding: 10px 12px; margin-bottom: 12px; background: #f8f9fa; border-radius: 8px; }
-    .history-thumb { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 1px solid #ddd; }
-    .history-detail-photo { max-width: 100%; max-height: 300px; border-radius: 10px; }
-    .nav-tabs .nav-link { font-weight: 600; color: #0b3d91; }
-    .nav-tabs .nav-link.active { background: #0b3d91; color: white; border-color: #0b3d91; }
-    .tab-pane { padding-top: 10px; }
-    #keluarInfo { background: #f8f9fa; border-radius: 8px; padding: 10px; }
-    .loading { opacity: 0.6; pointer-events: none; }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promo Jualan · ShopWA</title>
+    <!-- Font Awesome 6 (gratis) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ----- RESET & VARIABEL ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #25D366;
+            --primary-dark: #128C7E;
+            --secondary: #075E54;
+            --accent: #FF6B35;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            --radius: 16px;
+            --transition: 0.3s ease;
+            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ----- BUTTONS ----- */
+        .btn-wa {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--primary);
+            color: #fff;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+        }
+
+        .btn-wa:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(37, 211, 102, 0.45);
+        }
+
+        .btn-wa i {
+            font-size: 1.2rem;
+        }
+
+        .btn-outline-wa {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            color: var(--primary);
+            padding: 12px 28px;
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-outline-wa:hover {
+            background: var(--primary);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .btn-accent {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent);
+            color: #fff;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 14px rgba(255, 107, 53, 0.35);
+        }
+
+        .btn-accent:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+
+        /* ----- HEADER / NAV ----- */
+        .navbar {
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 14px 0;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 2rem;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            list-style: none;
+            font-weight: 500;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links .btn-wa-small {
+            background: var(--primary);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .nav-links .btn-wa-small:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        /* ----- HERO ----- */
+        .hero {
+            padding: 60px 0 70px;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-radius: 0 0 40px 40px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            right: -10%;
+            top: -20%;
+            width: 400px;
+            height: 400px;
+            background: rgba(37, 211, 102, 0.10);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+
+        .hero-content h1 span {
+            color: var(--primary);
+        }
+
+        .hero-content p {
+            font-size: 1.15rem;
+            color: var(--text-light);
+            max-width: 500px;
+            margin-bottom: 28px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: #fff;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            max-height: 380px;
+            object-fit: cover;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 24px;
+        }
+
+        .hero-stats .stat {
+            text-align: center;
+        }
+
+        .hero-stats .stat .number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .hero-stats .stat .label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* ----- SECTION TITLE ----- */
+        .section-title {
+            text-align: center;
+            margin-bottom: 44px;
+        }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .section-title h2 span {
+            color: var(--primary);
+        }
+
+        .section-title p {
+            color: var(--text-light);
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        /* ----- PRODUK / PRODUCTS ----- */
+        .products {
+            padding: 60px 0 40px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.10);
+        }
+
+        .product-card .image {
+            height: 220px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #94a3b8;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card .image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-card .badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: var(--accent);
+            color: #fff;
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .product-card .badge.hot {
+            background: #ef4444;
+        }
+
+        .product-card .badge.new {
+            background: #3b82f6;
+        }
+
+        .product-card .body {
+            padding: 20px 22px 24px;
+        }
+
+        .product-card .body .name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .product-card .body .desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-card .body .price {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 16px;
+        }
+
+        .product-card .body .price small {
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: var(--text-light);
+            text-decoration: line-through;
+            margin-left: 10px;
+        }
+
+        .product-card .body .btn-wa {
+            width: 100%;
+            justify-content: center;
+            padding: 12px;
+            font-size: 0.95rem;
+        }
+
+        /* ----- PROMO BANNER ----- */
+        .promo-banner {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-dark));
+            border-radius: var(--radius);
+            padding: 50px 40px;
+            margin: 40px 0 60px;
+            color: #fff;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            align-items: center;
+            box-shadow: 0 12px 30px rgba(7, 94, 84, 0.25);
+        }
+
+        .promo-banner .left h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .promo-banner .left p {
+            opacity: 0.9;
+            font-size: 1.05rem;
+            max-width: 450px;
+        }
+
+        .promo-banner .left .timer {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .promo-banner .left .timer .unit {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 18px;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 64px;
+        }
+
+        .promo-banner .left .timer .unit .num {
+            font-size: 2rem;
+            font-weight: 800;
+            display: block;
+            line-height: 1.2;
+        }
+
+        .promo-banner .left .timer .unit .label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            opacity: 0.8;
+            letter-spacing: 0.5px;
+        }
+
+        .promo-banner .right {
+            text-align: center;
+        }
+
+        .promo-banner .right .discount {
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .promo-banner .right .discount small {
+            font-size: 1.5rem;
+            font-weight: 400;
+        }
+
+        .promo-banner .right .sub {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        /* ----- TESTIMONIAL ----- */
+        .testimonials {
+            padding: 40px 0 60px;
+        }
+
+        .testi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .testi-card {
+            background: var(--card-bg);
+            padding: 24px 22px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .testi-card .stars {
+            color: #f59e0b;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        .testi-card blockquote {
+            font-style: italic;
+            color: var(--text);
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .testi-card .customer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .testi-card .customer .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .testi-card .customer .info .name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .testi-card .customer .info .via {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* ----- LOKASI (MAPS) ----- */
+        .location {
+            padding: 60px 0 40px;
+        }
+
+        .location-wrapper {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .map-container iframe {
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            height: 400px;
+        }
+
+        .location-info {
+            background: var(--card-bg);
+            padding: 30px 28px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .location-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+            color: var(--secondary);
+        }
+
+        .location-info p {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-light);
+        }
+
+        .location-info .btn-wa {
+            margin-top: 16px;
+        }
+
+        /* ----- FOOTER ----- */
+        .footer {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 50px 0 30px;
+            margin-top: 40px;
+            border-radius: 40px 40px 0 0;
+        }
+
+        .footer .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer .brand h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .footer .brand h3 i {
+            color: var(--primary);
+        }
+
+        .footer .brand p {
+            opacity: 0.7;
+            font-size: 0.95rem;
+            max-width: 300px;
+        }
+
+        .footer .brand .social {
+            display: flex;
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .footer .brand .social a {
+            background: rgba(255, 255, 255, 0.08);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            color: #fff;
+        }
+
+        .footer .brand .social a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer h4 {
+            color: #fff;
+            font-size: 1.05rem;
+            margin-bottom: 16px;
+        }
+
+        .footer ul {
+            list-style: none;
+        }
+
+        .footer ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer ul li a {
+            opacity: 0.7;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .footer ul li a:hover {
+            opacity: 1;
+            color: var(--primary);
+        }
+
+        .footer .bottom {
+            grid-column: 1 / -1;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 24px;
+            margin-top: 10px;
+            text-align: center;
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+
+        /* ----- FLOATING WA ----- */
+        .floating-wa {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            background: var(--primary);
+            color: #fff;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            box-shadow: 0 6px 24px rgba(37, 211, 102, 0.45);
+            transition: var(--transition);
+            z-index: 999;
+            border: none;
+            cursor: pointer;
+        }
+
+        .floating-wa:hover {
+            transform: scale(1.08);
+            box-shadow: 0 10px 32px rgba(37, 211, 102, 0.55);
+        }
+
+        /* ----- RESPONSIVE ----- */
+        @media (max-width: 992px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-image img {
+                max-height: 280px;
+            }
+
+            .promo-banner {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: 36px 24px;
+            }
+
+            .promo-banner .left .timer {
+                justify-content: center;
+            }
+
+            .promo-banner .right .discount {
+                font-size: 2.8rem;
+            }
+
+            .location-wrapper {
+                grid-template-columns: 1fr;
+            }
+            .map-container iframe {
+                height: 300px;
+            }
+
+            .footer .container {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                padding: 20px 0 10px;
+                gap: 16px;
+                background: #fff;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .hero {
+                padding: 40px 0 50px;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-stats {
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 20px;
+            }
+
+            .promo-banner .left h3 {
+                font-size: 1.4rem;
+            }
+
+            .promo-banner .left .timer .unit {
+                min-width: 52px;
+                padding: 6px 12px;
+            }
+
+            .promo-banner .left .timer .unit .num {
+                font-size: 1.5rem;
+            }
+
+            .footer .container {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .floating-wa {
+                width: 56px;
+                height: 56px;
+                font-size: 1.8rem;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 14px;
+            }
+
+            .product-card .body {
+                padding: 14px 16px 18px;
+            }
+
+            .product-card .body .name {
+                font-size: 0.95rem;
+            }
+
+            .product-card .body .price {
+                font-size: 1.1rem;
+            }
+
+            .product-card .body .btn-wa {
+                font-size: 0.8rem;
+                padding: 10px;
+            }
+
+            .hero-content h1 {
+                font-size: 1.6rem;
+            }
+
+            .section-title h2 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="header">
-    <h2><i class="bi bi-cloud"></i> Parkir Cloud</h2>
-    <p class="mb-0">Tarif <strong>Rp 2.000</strong> / jam – Data tersimpan di Google Drive</p>
-  </div>
-
-  <!-- TAB UTAMA: MASUK / KELUAR -->
-  <ul class="nav nav-tabs" id="mainTab" role="tablist">
-    <li class="nav-item"><button class="nav-link active" id="masuk-tab" data-bs-toggle="tab" data-bs-target="#masukPane" type="button"><i class="bi bi-box-arrow-in-right"></i> Masuk</button></li>
-    <li class="nav-item"><button class="nav-link" id="keluar-tab" data-bs-toggle="tab" data-bs-target="#keluarPane" type="button"><i class="bi bi-box-arrow-right"></i> Keluar</button></li>
-  </ul>
-
-  <div class="tab-content" id="mainTabContent">
-    <!-- TAB MASUK -->
-    <div class="tab-pane fade show active" id="masukPane">
-      <div class="card card-custom mt-3">
-        <div class="card-header"><i class="bi bi-camera"></i> Foto Kendaraan & Pengendara</div>
-        <div class="card-body text-center">
-          <div class="mb-2">
-            <button class="btn btn-primary btn-sm me-1" onclick="startPhotoCamera('environment')"><i class="bi bi-camera-rear"></i> Kamera Belakang</button>
-            <button class="btn btn-secondary btn-sm" onclick="startPhotoCamera('user')"><i class="bi bi-camera-front"></i> Kamera Depan</button>
-            <button class="btn btn-outline-danger btn-sm ms-1" onclick="stopPhotoCamera()"><i class="bi bi-power"></i> Matikan</button>
-          </div>
-          <div class="camera-box" id="cameraContainer" style="display:none;"><video id="previewVideo" autoplay playsinline></video></div>
-          <button class="btn btn-warning my-2 fw-bold" onclick="capturePhoto()" id="captureBtn" style="display:none;"><i class="bi bi-camera-fill"></i> AMBIL FOTO</button>
-          <div id="photoPreviewArea" style="display:none;" class="mt-2">
-            <img id="capturedPhotoPreview" class="photo-preview" />
-            <div><button class="btn btn-sm btn-danger" onclick="deletePhoto()"><i class="bi bi-trash"></i> Hapus Foto</button></div>
-          </div>
-          <canvas id="photoCanvas" style="display:none;"></canvas>
+    <!-- ===== NAVBAR ===== -->
+    <header class="navbar">
+        <div class="container">
+            <div class="logo">
+                <i class="fab fa-whatsapp"></i>
+                Shop<span>WA</span>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#products">Produk</a></li>
+                <li><a href="#promo">Promo</a></li>
+                <li><a href="#testimonials">Testimoni</a></li>
+                <li><a href="#location">Lokasi</a></li>
+                <li><a href="#contact">Kontak</a></li>
+                <li>
+                    <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20tertarik%20dengan%20promo%20Anda" target="_blank" class="btn-wa-small">
+                        <i class="fab fa-whatsapp"></i> Chat
+                    </a>
+                </li>
+            </ul>
         </div>
-      </div>
+    </header>
 
-      <div class="card card-custom">
-        <div class="card-header"><i class="bi bi-pencil"></i> Data Kendaraan Masuk</div>
-        <div class="card-body">
-          <div class="mb-3"><label class="fw-semibold">Kode Spot</label><input type="text" class="form-control" id="spotCode" placeholder="A1, B2, LT-3" /></div>
-          <div class="mb-3"><label class="fw-semibold">Nomor Plat</label><input type="text" class="form-control text-uppercase" id="plateNumber" placeholder="B 1234 XYZ" /></div>
-          <div id="photoStatus" class="alert alert-info py-1 d-none"><i class="bi bi-check-circle"></i> Foto sudah diambil</div>
-          <button class="btn btn-success w-100 py-2" onclick="checkIn()"><i class="bi bi-box-arrow-in-right"></i> Masukkan Kendaraan</button>
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-bolt"></i> PROMO SPESIAL HARI INI
+                </div>
+                <h1>Dapatkan Diskon <span>50%</span> <br />Untuk Pembelian Pertama</h1>
+                <p>
+                    Belanja produk berkualitas dengan harga terjangkau.
+                    Klik tombol di bawah untuk order langsung via WhatsApp Business!
+                </p>
+                <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20ingin%20order%20promo%20pertama" target="_blank" class="btn-wa">
+                    <i class="fab fa-whatsapp"></i> Order Sekarang
+                </a>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="number">500+</div>
+                        <div class="label">Pelanggan Puas</div>
+                    </div>
+                    <div class="stat">
+                        <div class="number">98%</div>
+                        <div class="label">Pesanan Tepat Waktu</div>
+                    </div>
+                    <div class="stat">
+                        <div class="number">4.9</div>
+                        <div class="label">Rating Pelanggan</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://picsum.photos/seed/shop/600/400" alt="Promo Jualan" />
+            </div>
         </div>
-      </div>
-    </div>
+    </section>
 
-    <!-- TAB KELUAR -->
-    <div class="tab-pane fade" id="keluarPane">
-      <div class="card card-custom mt-3">
-        <div class="card-header"><i class="bi bi-box-arrow-right"></i> Keluarkan Kendaraan</div>
-        <div class="card-body">
-          <div class="mb-3"><label class="fw-semibold">Nomor Plat</label><input type="text" class="form-control text-uppercase" id="plateOut" placeholder="Masukkan plat" /></div>
-          <button class="btn btn-primary w-100 py-2" onclick="cariKendaraan()"><i class="bi bi-search"></i> Cari Kendaraan</button>
-          <div id="keluarInfo" class="mt-3" style="display:none;"></div>
-          <button class="btn btn-danger w-100 py-2 mt-2" id="btnKeluarConfirm" style="display:none;" onclick="confirmCheckOut()"><i class="bi bi-box-arrow-right"></i> Konfirmasi Keluar</button>
+    <!-- ===== PRODUK ===== -->
+    <section class="products" id="products">
+        <div class="container">
+            <div class="section-title">
+                <h2>Produk <span>Unggulan</span></h2>
+                <p>Pilih produk favoritmu, lalu klik order untuk langsung terhubung dengan kami di WhatsApp Business.</p>
+            </div>
+
+            <div class="product-grid" id="productGrid">
+                <!-- card akan di-generate oleh JS -->
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- TOMBOL RIWAYAT -->
-  <div class="mt-3 text-center">
-    <button class="btn btn-outline-primary btn-sm" onclick="toggleHistory()" id="toggleHistoryBtn"><i class="bi bi-clock-history"></i> Tampilkan Riwayat</button>
-  </div>
-
-  <!-- RIWAYAT -->
-  <div id="historyContainer" style="display:none;" class="mt-3">
-    <div class="card card-custom">
-      <div class="card-header bg-secondary text-white"><i class="bi bi-list-ul"></i> Riwayat Kendaraan</div>
-      <div class="card-body">
-        <ul class="nav nav-tabs" id="historyTab">
-          <li class="nav-item"><button class="nav-link active" id="hMasuk-tab" data-bs-toggle="tab" data-bs-target="#hMasuk" onclick="renderHistoryTab('masuk')"><i class="bi bi-box-arrow-in-right"></i> Masuk (Aktif)</button></li>
-          <li class="nav-item"><button class="nav-link" id="hKeluar-tab" data-bs-toggle="tab" data-bs-target="#hKeluar" onclick="renderHistoryTab('keluar')"><i class="bi bi-box-arrow-right"></i> Keluar (Selesai)</button></li>
-        </ul>
-        <div class="tab-content mt-2">
-          <div class="tab-pane fade show active" id="hMasuk"><div id="historyMasukBody"><p class="text-muted text-center">Memuat...</p></div></div>
-          <div class="tab-pane fade" id="hKeluar"><div id="historyKeluarBody"><p class="text-muted text-center">Memuat...</p></div></div>
+    <!-- ===== PROMO BANNER ===== -->
+    <section class="container" id="promo">
+        <div class="promo-banner">
+            <div class="left">
+                <h3><i class="fas fa-tags"></i> Flash Sale 50%</h3>
+                <p>Hanya untuk 100 pembelian pertama! Gunakan kode <strong>FLASH50</strong> saat order.</p>
+                <div class="timer" id="countdown">
+                    <div class="unit">
+                        <span class="num" id="days">00</span>
+                        <span class="label">Hari</span>
+                    </div>
+                    <div class="unit">
+                        <span class="num" id="hours">00</span>
+                        <span class="label">Jam</span>
+                    </div>
+                    <div class="unit">
+                        <span class="num" id="minutes">00</span>
+                        <span class="label">Menit</span>
+                    </div>
+                    <div class="unit">
+                        <span class="num" id="seconds">00</span>
+                        <span class="label">Detik</span>
+                    </div>
+                </div>
+            </div>
+            <div class="right">
+                <div class="discount">50 <small>%</small></div>
+                <div class="sub">OFF <br /> semua produk</div>
+                <br />
+                <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20mau%20klaim%20diskon%2050%25%20dengan%20kode%20FLASH50" target="_blank" class="btn-accent">
+                    <i class="fab fa-whatsapp"></i> Klaim Sekarang
+                </a>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- STRUK -->
-  <div class="card card-custom mt-3" id="resultCard" style="display:none;">
-    <div class="card-header bg-dark text-white"><i class="bi bi-receipt"></i> Struk Digital</div>
-    <div class="card-body" id="resultBody"></div>
-  </div>
+    <!-- ===== TESTIMONIAL ===== -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Apa Kata <span>Pelanggan</span></h2>
+                <p>Mereka sudah merasakan kemudahan order via WhatsApp Business kami.</p>
+            </div>
+            <div class="testi-grid" id="testiGrid">
+                <!-- di-generate JS -->
+            </div>
+        </div>
+    </section>
 
-  <div class="text-center text-muted small mt-3"><i class="bi bi-cloud-check"></i> Data tersimpan di Google Cloud. Semua pengguna melihat data yang sama.</div>
-</div>
+    <!-- ===== LOKASI KAMI (MAPS) ===== -->
+    <section class="location" id="location">
+        <div class="container">
+            <div class="section-title">
+                <h2>Lokasi <span>Kami</span></h2>
+                <p>Kunjungi toko kami atau temukan kami di peta berikut.</p>
+            </div>
+            <div class="location-wrapper">
+                <div class="map-container">
+                    <iframe 
+                        src=" https://maps.app.goo.gl/kWFho4BCs8rL7meZ6?g_st=aw  " 
+                        width="100%" 
+                        height="450" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+                <div class="location-info">
+                    <h3><i class="fas fa-map-pin"></i>Alamat Kami</h3>
+                    <p>MIE AYAM HeHe
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  // ============================================================
-  //  GANTI DENGAN URL DEPLOYED APPS SCRIPT ANDA
-  // ============================================================
-  const API_BASE = 'https://script.google.com/macros/s/AKfycbw.../exec'; // GANTI!
+                    </p>
+                    <p><i class="fas fa-clock"></i> Jam Buka: 09.00 - 21.00 (Setiap Hari)</p>
+                    <p><i class="fas fa-phone"></i> Telp: +62 812-3456-7890</p>
+                    <a href="https://wa.me/6281234567890" target="_blank" class="btn-wa">
+                        <i class="fab fa-whatsapp"></i> Hubungi via WA
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  // ============================================================
-  //  1. KAMERA FOTO
-  // ============================================================
-  let photoStream = null;
-  let capturedPhotoData = null;
-  const video = document.getElementById('previewVideo');
-  const canvas = document.getElementById('photoCanvas');
-  const previewImg = document.getElementById('capturedPhotoPreview');
-  const previewArea = document.getElementById('photoPreviewArea');
-  const cameraContainer = document.getElementById('cameraContainer');
-  const captureBtn = document.getElementById('captureBtn');
-  const photoStatus = document.getElementById('photoStatus');
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="brand">
+                <h3><i class="fab fa-whatsapp"></i> ShopWA</h3>
+                <p>Solusi belanja mudah dan cepat. Order langsung via WhatsApp Business dan dapatkan promo menarik setiap hari.</p>
+                <div class="social">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="https://wa.me/6281234567890" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4>Menu</h4>
+                <ul>
+                    <li><a href="#products">Produk</a></li>
+                    <li><a href="#promo">Promo</a></li>
+                    <li><a href="#testimonials">Testimoni</a></li>
+                    <li><a href="#location">Lokasi</a></li>
+                    <li><a href="#contact">Kontak</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Bantuan</h4>
+                <ul>
+                    <li><a href="#">Cara Order</a></li>
+                    <li><a href="#">Pembayaran</a></li>
+                    <li><a href="#">Pengiriman</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Kontak</h4>
+                <ul>
+                    <li><i class="fab fa-whatsapp" style="color:var(--primary);"></i> +62 812-3456-7890</li>
+                    <li><i class="far fa-envelope"></i> shopwa@example.com</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Jakarta, Indonesia</li>
+                    <li><a href="https://wa.me/6281234567890" target="_blank" class="btn-wa-small" style="display:inline-flex;margin-top:6px;gap:6px;background:var(--primary);color:#fff;padding:6px 16px;border-radius:50px;font-size:0.8rem;">
+                            <i class="fab fa-whatsapp"></i> Chat Kami
+                        </a></li>
+                </ul>
+            </div>
+            <div class="bottom">
+                &copy; 2026 ShopWA — Sistem Promosi Jualan Terhubung WhatsApp Business
+            </div>
+        </div>
+    </footer>
 
-  function startPhotoCamera(facingMode) {
-    stopPhotoCamera();
-    navigator.mediaDevices.getUserMedia({ video: { facingMode, width: { ideal: 640 }, height: { ideal: 480 } }, audio: false })
-      .then(stream => { photoStream = stream; video.srcObject = stream; cameraContainer.style.display = 'block'; captureBtn.style.display = 'inline-block'; })
-      .catch(err => alert('Gagal buka kamera: ' + err.message));
-  }
-  function stopPhotoCamera() {
-    if (photoStream) { photoStream.getTracks().forEach(t => t.stop()); photoStream = null; }
-    video.srcObject = null; cameraContainer.style.display = 'none'; captureBtn.style.display = 'none';
-  }
-  function capturePhoto() {
-    if (!photoStream) { alert('Nyalakan kamera dulu!'); return; }
-    const ctx = canvas.getContext('2d');
-    canvas.width = video.videoWidth || 640; canvas.height = video.videoHeight || 480;
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    capturedPhotoData = canvas.toDataURL('image/jpeg', 0.7);
-    previewImg.src = capturedPhotoData; previewArea.style.display = 'block'; photoStatus.classList.remove('d-none');
-    stopPhotoCamera();
-  }
-  function deletePhoto() { capturedPhotoData = null; previewImg.src = ''; previewArea.style.display = 'none'; photoStatus.classList.add('d-none'); }
+    <!-- ===== FLOATING WA ===== -->
+    <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda" target="_blank" class="floating-wa" aria-label="Chat via WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
-  // ============================================================
-  //  2. API CALLS
-  // ============================================================
-  async function apiCall(action, payload = {}) {
-    const body = { action, ...payload };
-    const res = await fetch(API_BASE, {
-      method: 'POST',
-      mode: 'no-cors', // karena Apps Script tidak support CORS, kita pakai no-cors
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    // Karena no-cors, kita tidak bisa baca response langsung. Kita pakai JSONP alternatif?
-    // Sebenarnya kita bisa pakai mode 'cors' dengan mengatur header di GAS (tapi GAS tidak bisa).
-    // Solusi: gunakan fetch dengan mode 'cors' dan terima response sebagai text, lalu parse JSON.
-    // Tapi karena GAS web app tidak mengembalikan CORS header, browser akan blokir.
-    // Jadi kita harus menggunakan teknik lain: gunakan script tag atau ubah mode menjadi 'no-cors' tapi kita tidak bisa baca response.
-    // Solusi terbaik: deploy GAS sebagai Web App dan set "Who has access" = "Anyone" + gunakan mode 'cors' dengan menambahkan header di GAS (tidak mungkin).
-    // Alternatif: gunakan Google Apps Script API dengan callback (JSONP) – tapi agak rumit.
-    // Karena kita ingin sederhana, kita akan gunakan iframe atau form submit? Tidak praktis.
-    // Oleh karena itu, saya sarankan untuk menggunakan 'mode: cors' dan menangani error, tapi GAS tidak support CORS.
-    // Cara paling sederhana: gunakan library seperti 'google.script.run' jika dijalankan di dalam Apps Script HTML, tapi kita tidak di situ.
-    // Solusi: kita ubah pendekatan – jadikan satu file HTML di dalam Apps Script (HtmlService) agar bisa langsung komunikasi dengan server-side.
-    // Tapi itu akan mengubah arsitektur.
-    // Karena ini adalah contoh, saya akan tunjukkan cara dengan fetch + mode cors (tetapi harus diuji).
-    // Sebenarnya, jika kita deploy dengan "Execute as: Me" dan "Who has access: Anyone", maka CORS akan diizinkan untuk origin tertentu? Tidak, GAS tidak mengirimkan Access-Control-Allow-Origin.
-    // Oleh karena itu, kita harus menggunakan alternatif: pakai Google Apps Script sebagai proxy atau gunakan layanan pihak ketiga.
-    // Saya akan memberikan solusi dengan menggunakan "google.script.run" jika file HTML dihosting di Apps Script (HtmlService).
-    // Namun karena Anda ingin file HTML terpisah, kita bisa gunakan teknik JSONP: tambahkan callback parameter di URL.
-    // Tapi POST dengan JSONP tidak bisa.
-    // Jadi saya akan berikan dua opsi:
-    // 1. Gunakan HtmlService (hosting HTML di Apps Script) – lebih mudah dan aman.
-    // 2. Gunakan backend lain (misal Node.js + Firebase).
-    // Karena keterbatasan CORS, saya sarankan opsi 1.
-    // Saya akan tulis ulang untuk HtmlService.
-    // Tapi untuk menjawab pertanyaan, saya akan berikan kode yang bekerja dengan HtmlService.
-    // Maaf, karena batasan teknis, saya akan ubah pendekatan: Saya akan buat file HTML yang di-host di Apps Script (HtmlService) sehingga komunikasi langsung dengan google.script.run.
-    // Saya akan berikan instruksi deploy.
-  }
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        // ---- DATA PRODUK ----
+        const products = [{
+            id: 1,
+            name: 'Paket Hemat 1',
+            desc: 'Isi 12 item berkualitas premium + bonus pouch.',
+            price: 149000,
+            oldPrice: 299000,
+            image: 'https://picsum.photos/seed/prod1/400/300',
+            badge: 'hot',
+            badgeText: 'HOT'
+        }, {
+            id: 2,
+            name: 'Paket Keluarga',
+            desc: 'Paket lengkap untuk 4 orang, cocok untuk acara spesial.',
+            price: 249000,
+            oldPrice: 499000,
+            image: 'https://picsum.photos/seed/prod2/400/300',
+            badge: 'new',
+            badgeText: 'NEW'
+        }, {
+            id: 3,
+            name: 'Paket Eksklusif',
+            desc: 'Edisi terbatas dengan kemasan mewah dan kualitas terbaik.',
+            price: 349000,
+            oldPrice: 699000,
+            image: 'https://picsum.photos/seed/prod3/400/300',
+            badge: null,
+            badgeText: null
+        }, {
+            id: 4,
+            name: 'Paket Serbaguna',
+            desc: 'Cocok untuk hadiah atau kebutuhan sehari-hari.',
+            price: 99000,
+            oldPrice: 199000,
+            image: 'https://picsum.photos/seed/prod4/400/300',
+            badge: 'hot',
+            badgeText: 'HEMAT'
+        }, {
+            id: 5,
+            name: 'Paket Premium',
+            desc: 'Bahan pilihan dengan kualitas terbaik di kelasnya.',
+            price: 449000,
+            oldPrice: 899000,
+            image: 'https://picsum.photos/seed/prod5/400/300',
+            badge: null,
+            badgeText: null
+        }, {
+            id: 6,
+            name: 'Paket Startup',
+            desc: 'Paket ekonomis untuk memulai bisnis kecil-kecilan.',
+            price: 59000,
+            oldPrice: 129000,
+            image: 'https://picsum.photos/seed/prod6/400/300',
+            badge: 'new',
+            badgeText: 'PROMO'
+        }];
 
-  // ============================================================
-  //  Karena keterbatasan CORS, kita akan gunakan HtmlService.
-  //  Saya akan sediakan kode untuk index.html yang dijalankan di Apps Script.
-  //  Namun untuk keperluan demo, saya tetap berikan kode ini sebagai gambaran.
-  //  Silakan lihat jawaban final untuk solusi lengkap dengan HtmlService.
-  // ============================================================
-</script>
+        // ---- RENDER PRODUK ----
+        const grid = document.getElementById('productGrid');
+
+        products.forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+
+            const badgeHTML = p.badge ?
+                `<span class="badge ${p.badge}">${p.badgeText}</span>` :
+                '';
+
+            const oldPriceHTML = p.oldPrice ?
+                `<small>Rp ${p.oldPrice.toLocaleString('id-ID')}</small>` :
+                '';
+
+            const waMsg = encodeURIComponent(
+                `Halo, saya ingin memesan *${p.name}* (Rp ${p.price.toLocaleString('id-ID')})`
+            );
+
+            card.innerHTML = `
+                        <div class="image">
+                            <img src="${p.image}" alt="${p.name}" loading="lazy" />
+                            ${badgeHTML}
+                        </div>
+                        <div class="body">
+                            <div class="name">${p.name}</div>
+                            <div class="desc">${p.desc}</div>
+                            <div class="price">
+                                Rp ${p.price.toLocaleString('id-ID')}
+                                ${oldPriceHTML}
+                            </div>
+                            <a href="https://wa.me/6281234567890?text=${waMsg}" target="_blank" class="btn-wa">
+                                <i class="fab fa-whatsapp"></i> Order via WA
+                            </a>
+                        </div>
+                    `;
+            grid.appendChild(card);
+        });
+
+        // ---- TESTIMONI ----
+        const testimonials = [{
+            name: 'Rina S.',
+            text: 'Order cepat banget! Tinggal klik, langsung connect ke WA Business. Produk sesuai foto.',
+            via: 'via WhatsApp',
+            initial: 'R'
+        }, {
+            name: 'Andi P.',
+            text: 'Saya suka dengan sistemnya. Tinggal pilih produk, kirim pesan, langsung diproses.',
+            via: 'via WhatsApp',
+            initial: 'A'
+        }, {
+            name: 'Siti M.',
+            text: 'Diskon 50% beneran! Pelayanannya ramah dan pengiriman super cepat. Rekomendasi!',
+            via: 'via WhatsApp',
+            initial: 'S'
+        }, {
+            name: 'Budi K.',
+            text: 'Sangat membantu usaha saya. Orderan masuk terus lewat WA. Sistemnya simple dan efektif.',
+            via: 'via WhatsApp',
+            initial: 'B'
+        }];
+
+        const testiGrid = document.getElementById('testiGrid');
+        testimonials.forEach(t => {
+            const card = document.createElement('div');
+            card.className = 'testi-card';
+            card.innerHTML = `
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <blockquote>"${t.text}"</blockquote>
+                        <div class="customer">
+                            <div class="avatar">${t.initial}</div>
+                            <div class="info">
+                                <div class="name">${t.name}</div>
+                                <div class="via">${t.via}</div>
+                            </div>
+                        </div>
+                    `;
+            testiGrid.appendChild(card);
+        });
+
+        // ---- COUNTDOWN TIMER (1 hari dari sekarang) ----
+        const target = new Date();
+        target.setDate(target.getDate() + 1);
+        target.setHours(23, 59, 59, 0);
+
+        function updateCountdown() {
+            const now = new Date();
+            const diff = target - now;
+            if (diff <= 0) {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                return;
+            }
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('days').textContent = String(d).padStart(2, '0');
+            document.getElementById('hours').textContent = String(h).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(m).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(s).padStart(2, '0');
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // ---- HAMBURGER MENU ----
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+        });
+
+        // Tutup menu saat link diklik (mobile)
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+            });
+        });
+
+        // ---- SMOOTH SCROLL untuk anchor ----
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                const targetEl = document.querySelector(href);
+                if (targetEl) {
+                    e.preventDefault();
+                    targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        console.log('🚀 ShopWA — Sistem Promosi Jualan siap!');
+        console.log('💬 Terhubung ke WhatsApp Business via wa.me');
+    </script>
+
 </body>
 </html>
